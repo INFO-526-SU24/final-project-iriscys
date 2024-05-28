@@ -28,7 +28,6 @@ if (!require("pacman"))
   install.packages("pacman")
   
 pacman::p_load(here,
-               tidytuesdayR,
                tidyverse)
 ```
 
@@ -38,9 +37,7 @@ pacman::p_load(here,
 #| label: load-dataset
 #| results: false
 
-dffile <- tidytuesdayR::tt_load("2024-03-05")
-
-df <- dffile$trashwheel # load data set
+df <- read.csv(here("data", "trashwheel.csv")) # load data set
 ```
 
 The `trashwheel` dataset provided by Mr. Trash Wheel, one of the four Trash Wheels in the Healthy Harbor initiative, was selected from Tidy Tuesday 2024 for this project. It records the data of the trash collected by the four semi-autonomous trash interceptors placed at the end of a river, stream or other outfall, namely the *Mister Trash Wheel*, *the Professor Trash Wheel*, *the Captain Trash Wheel* and *the Gwynnda Trash Wheel* from 2014 to 2023.
@@ -75,22 +72,22 @@ glimpse(df)
 
 ### Plan of Attack:
 
-+------------------------------------+------------+-----------+-----------+-----------------------------------------------------------------------+
-| Task Name                          | Status     | Due       | Priority  | Summary                                                               |
-+:==================================:+:==========:+:=========:+:=========:+:=====================================================================:+
-| Draft of proposal                  | Complete   | 26-May    | High      | Choose of dataset.                                                    |
-|                                    |            |           |           |                                                                       |
-|                                    |            |           |           | Decide project questions and variables used.                          |
-+------------------------------------+------------+-----------+-----------+-----------------------------------------------------------------------+
-| Finalize project outline           | Incomplete | 3-Jun     | High      | Amend the `proposal.qmd` with feedbacks from classmates and professor |
-+------------------------------------+------------+-----------+-----------+-----------------------------------------------------------------------+
-| Complete waffle plot for part 1    | Incomplete | 15-Jun    | Moderate  | Complete waffle plot and its interpretation                           |
-+------------------------------------+------------+-----------+-----------+-----------------------------------------------------------------------+
-| Complete bar chart for part 2      | Incomplete | 18-Jun    | Moderate  | Complete bar chart and its interpretation                             |
-+------------------------------------+------------+-----------+-----------+-----------------------------------------------------------------------+
-| Finalize the report                | Incomplete | 20-Jun    | Low       | Finalize the `index.qmd`                                              |
-+------------------------------------+------------+-----------+-----------+-----------------------------------------------------------------------+
-| Finalize the presentable materials | Incomplete | 20-Jun    | Low       | Finalize the `presentation.qmd`                                       |
-+------------------------------------+------------+-----------+-----------+-----------------------------------------------------------------------+
-| Record the presentation            | Incomplete | 24-Jun    | Low       | Complete the presentation                                             |
-+------------------------------------+------------+-----------+-----------+-----------------------------------------------------------------------+
++------------------------------------+------------+---------+----------+-----------------------------------------------------------------------+
+| Task Name                          | Status     | Due     | Priority | Summary                                                               |
++:==================================:+:==========:+:=======:+:========:+:=====================================================================:+
+| Draft of proposal                  | Complete   | 26-May  | High     | Choose of dataset.                                                    |
+|                                    |            |         |          |                                                                       |
+|                                    |            |         |          | Decide project questions and variables used.                          |
++------------------------------------+------------+---------+----------+-----------------------------------------------------------------------+
+| Finalize project outline           | Incomplete | 3-Jun   | High     | Amend the `proposal.qmd` with feedbacks from classmates and professor |
++------------------------------------+------------+---------+----------+-----------------------------------------------------------------------+
+| Complete waffle plot for part 1    | Incomplete | 15-Jun  | Moderate | Complete waffle plot and its interpretation                           |
++------------------------------------+------------+---------+----------+-----------------------------------------------------------------------+
+| Complete bar chart for part 2      | Incomplete | 18-Jun  | Moderate | Complete bar chart and its interpretation                             |
++------------------------------------+------------+---------+----------+-----------------------------------------------------------------------+
+| Finalize the report                | Incomplete | 20-Jun  | Low      | Finalize the `index.qmd`                                              |
++------------------------------------+------------+---------+----------+-----------------------------------------------------------------------+
+| Finalize the presentable materials | Incomplete | 20-Jun  | Low      | Finalize the `presentation.qmd`                                       |
++------------------------------------+------------+---------+----------+-----------------------------------------------------------------------+
+| Record the presentation            | Incomplete | 24-Jun  | Low      | Complete the presentation                                             |
++------------------------------------+------------+---------+----------+-----------------------------------------------------------------------+
