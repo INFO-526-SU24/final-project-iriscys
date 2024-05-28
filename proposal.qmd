@@ -1,44 +1,96 @@
 ---
-title: "Proposal title"
+title: "Distribution on the amount of trash collected by Mr. Trash Wheel in 2022"
 subtitle: "Proposal"
 author: 
-  - name: "Team Name"
+  - name: "Iris Sum"
     affiliations:
       - name: "School of Information, University of Arizona"
-description: "Project description"
+description: "This project review the distribution of trash collected by Mr. Trash Wheel in 2022."
 format:
   html:
     code-tools: true
     code-overflow: wrap
     code-line-numbers: true
     embed-resources: true
+    code-fold: true
 editor: visual
 code-annotations: hover
 execute:
   warning: false
+  message: false
+  error: false
 ---
 
 ```{r}
 #| label: load-pkgs
-#| message: false
-library(tidyverse)
+
+if (!require("pacman")) 
+  install.packages("pacman")
+  
+pacman::p_load(here,
+               tidytuesdayR,
+               tidyverse)
 ```
 
 ## Dataset
 
 ```{r}
 #| label: load-dataset
-#| message: false
+#| results: false
+
+dffile <- tidytuesdayR::tt_load("2024-03-05")
+
+df <- dffile$trashwheel # load data set
 ```
 
-A brief description of your dataset including its provenance, dimensions, etc. as well as the reason why you chose this dataset.
+The `trashwheel` dataset provided by Mr. Trash Wheel, one of the four Trash Wheels in the Healthy Harbor initiative, was selected from Tidy Tuesday 2024 for this project. It records the data of the trash collected by the four semi-autonomous trash interceptors placed at the end of a river, stream or other outfall, namely the *Mister Trash Wheel*, *the Professor Trash Wheel*, *the Captain Trash Wheel* and *the Gwynnda Trash Wheel* from 2014 to 2023.
 
-Make sure to load the data and use inline code for some of this information.
+There are 16 variables with 993 records in the dataset. Each observation represents a dumpster from one of the four trash interceptors, and its related values such as the date of collection, weight, volume and the number of different trash collected. In total 7 types of trash are recorded as attributes and the collection amount are stored as numerical data: `PlasticBottles`, `Polystyrene`, `CigaretteButts`, `GlassBottles`, `PlasticBags`, `Wrappers`, `SportsBalls`.
+
+The selection of dataset was based on its cleanliness, simplicity, and meaningfulness. It is astonishing when looking into the amount of trash that has been disposed into rivers and the impressive collection capacity of the trash wheels. The objective of this project is to present the dataset in a clean and eye-catching manner in order to engage individuals in the issue of trash pollution and appreciate the endeavors dedicated to preserving the environment from trash.
 
 ## Questions
 
-The two questions you want to answer.
+What is the distribution of trash collected by Mr. Trash Wheel in 2022?
 
 ## Analysis plan
 
--   A plan for answering each of the questions including the variables involved, variables to be created (if any), external data to be merged in (if any).
+This project will review the distribution of trash collected by Mr. Trash Wheel in 2022 from two aspects: by the types of the trash collected and by the trash interceptors.
+
+From types of the trash collected perspective, the variable `Name` containing the name of interceptors together with all 7 trash type variables will be selected for `summarise()` analysis, after filtering the data within `Year` 2022 and wrangling with `pivot_longer`. Separate plots by `geom_waffle()` will be presented for each trash interceptor. It aims to visualized the proportion of differ trash collected by each trash interceptor clearly for comparison.
+
+On the other hand, a new variable `total_trash` will be created by adding up all trash amount collected by each trash interceptor. The plot will be displayed by `geom_col()` with x-axis equals to `Month` to show the change of trash amount collected by each trash interceptor throughout the year 2022.
+
+Attributes selected for the project (in 2022):
+
+```{r}
+#| label: attribute-selection
+
+df <- df |>
+  filter(Year == 2022) |>
+  select(Name, Month, PlasticBottles, Polystyrene, CigaretteButts, GlassBottles, PlasticBags, Wrappers, SportsBalls)
+
+glimpse(df)
+```
+
+### Plan of Attack:
+
++------------------------------------+------------+-----------+-----------+-----------------------------------------------------------------------+
+| Task Name                          | Status     | Due       | Priority  | Summary                                                               |
++:==================================:+:==========:+:=========:+:=========:+:=====================================================================:+
+| Draft of proposal                  | Complete   | 26-May    | High      | Choose of dataset.                                                    |
+|                                    |            |           |           |                                                                       |
+|                                    |            |           |           | Decide project questions and variables used.                          |
++------------------------------------+------------+-----------+-----------+-----------------------------------------------------------------------+
+| Finalize project outline           | Incomplete | 3-Jun     | High      | Amend the `proposal.qmd` with feedbacks from classmates and professor |
++------------------------------------+------------+-----------+-----------+-----------------------------------------------------------------------+
+| Complete waffle plot for part 1    | Incomplete | 15-Jun    | Moderate  | Complete waffle plot and its interpretation                           |
++------------------------------------+------------+-----------+-----------+-----------------------------------------------------------------------+
+| Complete bar chart for part 2      | Incomplete | 18-Jun    | Moderate  | Complete bar chart and its interpretation                             |
++------------------------------------+------------+-----------+-----------+-----------------------------------------------------------------------+
+| Finalize the report                | Incomplete | 20-Jun    | Low       | Finalize the `index.qmd`                                              |
++------------------------------------+------------+-----------+-----------+-----------------------------------------------------------------------+
+| Finalize the presentable materials | Incomplete | 20-Jun    | Low       | Finalize the `presentation.qmd`                                       |
++------------------------------------+------------+-----------+-----------+-----------------------------------------------------------------------+
+| Record the presentation            | Incomplete | 24-Jun    | Low       | Complete the presentation                                             |
++------------------------------------+------------+-----------+-----------+-----------------------------------------------------------------------+
