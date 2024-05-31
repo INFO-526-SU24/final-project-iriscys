@@ -1,11 +1,11 @@
 ---
-title: "Distribution on the amount of trash collected by Mr. Trash Wheel in 2022"
+title: "Distribution on the amount of trash collected by Mr. Trash Wheel in 2023"
 subtitle: "Proposal"
 author: 
   - name: "Iris Sum"
     affiliations:
       - name: "School of Information, University of Arizona"
-description: "This project review the distribution of trash collected by Mr. Trash Wheel in 2022."
+description: "This project review the distribution of trash collected by Mr. Trash Wheel in 2023."
 format:
   html:
     code-tools: true
@@ -46,33 +46,43 @@ df <- dffile$trashwheel # load data set
 
 The `trashwheel` dataset provided by Mr. Trash Wheel, one of the four Trash Wheels in the Healthy Harbor initiative, was selected from Tidy Tuesday 2024 for this project. It records the data of the trash collected by the four semi-autonomous trash interceptors placed at the end of a river, stream or other outfall, namely the *Mister Trash Wheel*, *the Professor Trash Wheel*, *the Captain Trash Wheel* and *the Gwynnda Trash Wheel* from 2014 to 2023.
 
+Since the trash wheel started operating from 2014, there were nearly 2,362 tons of trash collected, which equal to the weight of 15 whales! Among those collected trash, there were over 13 millions of cigarette butts. It really helps saving our ocean from toxic plastic pollution.
+
 There are 16 variables with 993 records in the dataset. Each observation represents a dumpster from one of the four trash interceptors, and its related values such as the date of collection, weight, volume and the number of different trash collected. In total 7 types of trash are recorded as attributes and the collection amount are stored as numerical data: `PlasticBottles`, `Polystyrene`, `CigaretteButts`, `GlassBottles`, `PlasticBags`, `Wrappers`, `SportsBalls`.
 
 The selection of dataset was based on its cleanliness, simplicity, and meaningfulness. It is astonishing when looking into the amount of trash that has been disposed into rivers and the impressive collection capacity of the trash wheels. The objective of this project is to present the dataset in a clean and eye-catching manner in order to engage individuals in the issue of trash pollution and appreciate the endeavors dedicated to preserving the environment from trash.
 
 ## Questions
 
-What is the distribution of trash collected by Mr. Trash Wheel in 2022?
+What is the distribution of trash collected by Mr. Trash Wheel in 2023?
 
 ## Analysis plan
 
-This project will review the distribution of trash collected by Mr. Trash Wheel in 2022 from two aspects: by the types of the trash collected and by the trash interceptors.
+This project will review the distribution of trash collected by Mr. Trash Wheel in 2023 from two aspects: by the types of the trash collected and by the trash interceptors. The data wrangling will mainly rely on `tidyverse` library.
 
-From types of the trash collected perspective, the variable `Name` containing the name of interceptors together with all 7 trash type variables will be selected for `summarise()` analysis, after filtering the data within `Year` 2022 and wrangling with `pivot_longer`. Separate plots by `geom_waffle()` will be presented for each trash interceptor. It aims to visualized the proportion of differ trash collected by each trash interceptor clearly for comparison.
-
-On the other hand, a new variable `total_trash` will be created by adding up all trash amount collected by each trash interceptor. The plot will be displayed by `geom_col()` with x-axis equals to `Month` to show the change of trash amount collected by each trash interceptor throughout the year 2022.
-
-Attributes selected for the project (in 2022):
+Attributes used for the project (filtered by 2023):
 
 ```{r}
 #| label: attribute-selection
 
 df <- df |>
-  filter(Year == 2022) |>
-  select(Name, Month, PlasticBottles, Polystyrene, CigaretteButts, GlassBottles, PlasticBags, Wrappers, SportsBalls)
+  filter(Year == 2023) |> # filter the dataset in 2023
+  select(Name, Month, PlasticBottles, Polystyrene, CigaretteButts, GlassBottles, PlasticBags, Wrappers, SportsBalls) # select related atributes for analysis
 
-glimpse(df)
+glimpse(df) # take a look of the filtered dataset
 ```
+
+#### Plot 1:
+
+From types of the trash collected perspective, separate plots by `geom_pictogram()` will be created for each trash interceptor. It aims to visualized the proportion of differ trash collected by each trash interceptor clearly for comparison, with the use of icons to represent different trash types instead of single image with `geom_waffle()`.
+
+The variables involved in this plot will be `Name` containing the name of interceptors, and the 7 trash type variables. The dataset will first be filtered by `Year` 2023, followed by transferring all trash column names into a new variable `trash_type` with `trash_amount` storing the numeric amount of each trash by using `pivot_longer()`. Then the data will be `group_by()` `Name` and `trash_type`, and calculate the sum of trash collected with `summarise()`.
+
+#### Plot 2:
+
+On the other hand, a plot by `geom_col()` with x-axis equals to `Month` and y-axis equal to `total_trash` will be created to show the change of trash amount collected by each trash interceptor with dodged columns throughout the year 2023. To do this, after filtering the dataset with `Year` 2023, variables `Name`, `Month`, and the 7 trash type variables will be selected. A new variable `total_trash` will be added by summing up all trash amount collected by each trash interceptor rowwisely.
+
+For statistical analysis, ANOVA will be used for observing the variance between total trash amount by each trash interceptor throughout the year. To prepare the data matrix for this, the cleaned data from plot 2 will be used by removing `Month` and the 7 trash type variables, remaining `Name` and `total_trash`. ANOVA will be performed with `aov()` and the result will be interpreted in Discussion section with information from plot 2.
 
 ### Plan of Attack:
 
@@ -83,7 +93,7 @@ glimpse(df)
 |                                    |            |         |          |                                                                       |
 |                                    |            |         |          | Decide project questions and variables used.                          |
 +------------------------------------+------------+---------+----------+-----------------------------------------------------------------------+
-| Finalize project outline           | Incomplete | 3-Jun   | High     | Amend the `proposal.qmd` with feedbacks from classmates and professor |
+| Finalize project outline           | Complete   | 3-Jun   | High     | Amend the `proposal.qmd` with feedbacks from classmates and professor |
 +------------------------------------+------------+---------+----------+-----------------------------------------------------------------------+
 | Complete waffle plot for part 1    | Incomplete | 15-Jun  | Moderate | Complete waffle plot and its interpretation                           |
 +------------------------------------+------------+---------+----------+-----------------------------------------------------------------------+
