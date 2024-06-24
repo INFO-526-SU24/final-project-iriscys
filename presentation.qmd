@@ -272,15 +272,3 @@ ggplot(df2) +
     aspect.ratio = 0.6
   )
 ```
-
-## Conclusions {.smaller}
-
--   Majority of collected trash were:
-
-    1.  Cigarette butts
-
-    2.  Plastic bottles or wrappers
-
--   Location of the interceptors will affect its trash collection amount and types.
-
--   Further investigation on why there was a drastic increase in trash collected by Gwynnda Trash Wheel in Dec 2023.
