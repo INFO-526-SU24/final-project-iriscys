@@ -1,19 +1,15 @@
 ---
-title: "Project title"
+title: "Distribution on the amount of trash collected by Mr. Trash Wheel in 2023"
 subtitle: "INFO 526 - Summer 2024 - Final Project"
-author: "Author names"
-title-slide-attributes:
-  data-background-image: images/watercolour_sys02_img34_teacup-ocean.jpg
-  data-background-size: stretch
-  data-background-opacity: "0.7"
-  data-slide-number: none
-format:
-  revealjs:
-    theme:  ['data/customtheming.scss']
-  
+author: "Iris Sum"
+format: 
+  revealjs: 
+    theme: simple
 editor: visual
 execute:
+  warning: false
   echo: false
+  message: false
 ---
 
 ```{r}
@@ -21,145 +17,270 @@ execute:
 #| include: false
 
 # Load packages here
-pacman::p_load(tidymodels,
-               tidyverse)
+pacman::p_load(
+  extrafont,
+  here,
+  imputeTS,
+  scales,
+  tidyverse,
+  waffle)
 
 ```
 
+## Introduction {.smaller}
+
+-   Trash disposed improperly leading to serious water pollution in the sea, river or stream
+
+-   Interesting to know what kind of trash mainly involved and their amount
+
+-   Latest data of trash collected by Mr. Trash Wheel were examined in this project
+
+![Source: Mr. Trash Wheel homepage at https://www.mrtrashwheel.com/trash-interception](images/whales.png){fig-align="left"}
+
+## **Dataset** {.smaller}
+
+-   `trashwheel` dataset provided by Mr. Trash Wheel from Tidy Tuesday 2024
+
+-   16 variables with 993 records including:
+
+    -   Attributes related to a dumpster:
+
+        `ID`, `Name`, `Dumpster`, `Month`, `Year`, `Date`
+
+    -   Number of trash collected stored as:
+
+        `PlasticBottles`, `Polystyrene`, `CigaretteButts`, `GlassBottles`, `PlasticBags`, `Wrappers`, `SportsBalls`, `Weight`, `Volume`, `HomesPowered`
+
+## Main Question {.nostretch}
+
+<br> <br>
+
+*What is the distribution of trash collected by Mr. Trash Wheel in 2023?*
+
+<br> <br>
+
+![](images/trash_wheel.png){fig-alt="Mr. trash wheel" fig-align="right" width="12cm"}
+
+## Visualization 1
+
 ```{r}
-#| label: setup
-#| include: false
+#| label: final-plot1-data
 
-# Plot theme
-ggplot2::theme_set(ggplot2::theme_minimal(base_size = 11))
+df <- read.csv(here("data", "trashwheel.csv")) # load data set
 
-# For better figure resolution
-knitr::opts_chunk$set(
-  fig.retina = 3, 
-  dpi = 300, 
-  fig.width = 6, 
-  fig.asp = 0.618 
+### clean data set for plot 1
+trash_lv <- c("CigaretteButts", "GlassBottles", "PlasticBags", "PlasticBottles",
+              "Polystyrene", "SportsBalls", "Wrappers") # for trash factor level
+
+df1 <- df |>
+  filter(Year == 2023) |> # filter data in 2023
+  select(Name, Month, PlasticBottles, Polystyrene, CigaretteButts, GlassBottles,
+         PlasticBags, Wrappers, SportsBalls) |> # select related attibutes
+  mutate_if(is.numeric, ~replace_na(., 0)) |> # replace NA value with 0
+  pivot_longer( # turn 7 trash type column into 1 column
+    cols = c("PlasticBottles", "Polystyrene", "CigaretteButts", "GlassBottles",
+             "PlasticBags", "Wrappers", "SportsBalls"),
+    names_to = "trash_type",
+    values_to = "trash_amount"
+  ) |>
+  group_by(Name, trash_type) |> # to see amount of trash by type for each wheel
+  summarise(trash_amount = sum(trash_amount)) |>
+  mutate(trash_type = fct_relevel(trash_type, trash_lv)) # set trash factor lv
+
+# calculate the total amount by wheel
+wheel_total <- df1 |>
+  group_by(Name) |>
+  summarise(total = sum(trash_amount))
+
+# calculate the percentage by trash type for each wheel
+df1 <- df1 |>
+  mutate( # add total trash amount by wheel
+    total_wheel = case_when(
+      Name == "Captain Trash Wheel" ~ wheel_total$total[wheel_total$Name == "Captain Trash Wheel"],
+      Name == "Gwynnda Trash Wheel" ~ wheel_total$total[wheel_total$Name == "Gwynnda Trash Wheel"],
+      Name == "Mister Trash Wheel" ~ wheel_total$total[wheel_total$Name == "Mister Trash Wheel"],
+      Name == "Professor Trash Wheel" ~ wheel_total$total[wheel_total$Name == "Professor Trash Wheel"]),
+    trash_pct = floor(trash_amount / total_wheel * 100) # calculate percentage
+  )
+
+# prepare icon list for the plot
+icon_ls <- c("smoking", "shopping-bag", "wine-bottle",
+             "hockey-puck", "box-open", "glass-whiskey", "basketball-ball")
+```
+
+```{r fig.width = 6, fig.asp = 0.8, fig.retina = 3, fig.align = "center", dpi = 300}
+#| fig-show: "hide"
+#| label: fig-final-plot1
+#| fig-cap: |
+#|   Proportion of trash collected by Mr. Trash Wheel in 2023
+
+# For first time geom_pictogram icon user may need to operate following steps to import the icon file:
+# waffle::install_fa_fonts() # check the location of font in your computer and install them
+# font_import() # import font to R
+# fa_grep("house") # check icon with keywords, eg. house
+# To know more: https://rud.is/rpubs/building-pictograms.html
+
+# create plot 1
+ggplot(df1, aes(label = trash_type, values = trash_pct)) +
+  geom_pictogram(
+    aes(color = trash_type),
+    make_proportional = TRUE,
+    size = 2.5,
+    flip = TRUE
+  ) +
+  scale_label_pictogram(
+    name = "",
+    values = icon_ls # different icon for different trash
+  ) +
+  scale_color_manual(name = "",
+                     values = c("#9bb996", "#81af9b", "#45ada8", "#547980", "#594f4f")) +
+  facet_wrap(~Name, nrow = 1,
+             labeller = labeller(Name = 
+                                   c("Captain Trash Wheel" = "Captain Trash Wheel\nTrash collected: 28,990",
+                                     "Gwynnda Trash Wheel" = "Gwynnda Trash Wheel\nTrash collected: 521,549",
+                                     "Mister Trash Wheel" = "Mister Trash Wheel\nTrash collected: 476,116",
+                                     "Professor Trash Wheel" = "Professor Trash Wheel\nTrash collected: 166,212"))
+  ) + # separate subplot by wheel
+  labs(
+    title = "Proportion of trash collected by Mr. Trash Wheel in 2023",
+    caption = "Source: Trash Wheel Collection Data from the Mr. Trash Wheel\nRetreived from Tidy Tuesday 2024"
+  ) +
+  coord_equal() +
+  theme_minimal() + 
+  theme_enhance_waffle() + # remove x & y axis
+  theme(legend.position = "bottom", # legend position
+        legend.text = element_text(hjust = 0, 
+                                   vjust = 0.7, 
+                                   size = 6),
+        plot.title = element_text(hjust = 0.5, 
+                                  size = 11),
+        plot.caption = element_text(size = 5),
+        strip.text = element_text(size = 6) # adjust subplots title size
+  )
+
+## just in case the first time user cannot generate the plot without installing & importing the font, a png of the plot is attached.
+```
+
+::: {#fig-plot1}
+![](images/plot_1.png){fig-align="center"}
+
+Proportion of trash collected by Mr. Trash Wheel in 2023
+:::
+
+## Visualization 2
+
+```{r}
+#| label: final-plot2-data
+
+# clean data for plot 2
+df2 <- df |>
+  filter(Year == 2023) |> # filter data in 2023
+  select(Name, Month, PlasticBottles, Polystyrene, CigaretteButts, GlassBottles,
+         PlasticBags, Wrappers, SportsBalls) |> # select related attributes
+  mutate_if(is.numeric, ~replace_na(., 0)) |> # replace NA with 0
+  rowwise() |>
+  mutate( # calculate total trash by row
+    total_trash = sum(c(PlasticBottles, Polystyrene, CigaretteButts, GlassBottles,
+                      PlasticBags, Wrappers, SportsBalls))
+  ) |>
+  select(Name, Month, total_trash) |> # remove redundant columns
+  mutate(Month = case_when(
+    Month == "september" ~ "September",
+    TRUE ~ Month)
+  ) |>
+  group_by(Name, Month) |>
+  summarise(total_trash = sum(total_trash)) |>
+  ungroup() |>
+  complete( # some wheel do not have 12 month data, fill missing data with 0
+    Name, Month,
+    fill = list(total_trash = 0)) |>
+  mutate(
+    Month = case_when(
+      Month == "January" ~ 1,
+      Month == "February" ~ 2,
+      Month == "March" ~ 3,
+      Month == "April" ~ 4,
+      Month == "May" ~ 5,
+      Month == "June" ~ 6,
+      Month == "July" ~ 7,
+      Month == "August" ~ 8,
+      Month == "September" ~ 9,
+      Month == "October" ~ 10,
+      Month == "November" ~ 11,
+      Month == "December" ~ 12),
+    Month = month(Month)
+  ) 
+
+# df for background
+bg_line <- tibble(x = seq(0.5, 12.5, 1), 
+                     y = rep.int(0, 13),
+                     xend = seq(0.5, 12.5, 1),
+                     yend = rep.int(117000, 13))
+
+bg_text <- tibble(x_text = seq(1, 12, 1),
+                     label = c("JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+                               "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"))
+```
+
+```{r fig.width = 7, fig.asp = 0.7, fig.retina = 3, fig.align = "center", dpi = 300}
+#| label: fig-final-plot2
+#| fig-cap: |
+#|   Nubmer of trash collected by Mr. Trash Wheel in 2023 (by months)
+
+# create plot 2
+ggplot(df2) +
+  geom_segment(
+    data = bg_line,
+    aes(x = x, y = y, xend = xend, yend = yend),
+    color = "#bababa",
+    size = 0.1
+  ) +
+  geom_text( # add background text
+    data = bg_text,
+    aes(x = x_text, y = 115000, label = label),
+    hjust = 1,
+    size = 5, 
+    fontface = "bold", 
+    color = "#bababa"
+  ) +
+  geom_col( # add bar chart
+    aes(x = Month, 
+        y = total_trash, 
+        fill = Name),
+    position = "dodge",
+    width = 0.95
+    ) +
+  coord_flip(expand = FALSE) +
+  scale_y_continuous(labels = label_number(big.mark = ","),
+                     limits = c(-100, 117000)) +
+  scale_fill_manual(values = c("#0f0d0d", "#79402e", "#8d8680", "#ccba72")) +
+  labs(title = "Nubmer of trash collected by Mr. Trash Wheel in 2023 (by months)",
+       x = NULL,
+       y = NULL,
+       caption = "Source: Trash Wheel Collection Data from the Mr. Trash Wheel\nRetreived from Tidy Tuesday 2024",
+       fill = NULL) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 16),
+    plot.caption = element_text(size = 6),
+    panel.grid = element_blank(),
+    panel.grid.major.x = element_line(color = "#bababa", linetype = "dashed", size = 0.1),
+    axis.text.y = element_blank(),
+    legend.position = "top",
+    legend.key.size = unit(0.35, "cm"),
+    legend.text = element_text(size = 6),
+    aspect.ratio = 0.6
   )
 ```
 
-```{r}
-#| label: load-data
-#| include: false
-# Load data here
-data(mtcars)
-mtcars$speed <- mtcars$hp / mtcars$wt
+## Conclusions {.smaller}
 
-data("penguins")
-```
+-   Majority of collected trash were:
 
-# Using Quarto for presentations
+    1.  Cigarette butts
 
-## Quarto
+    2.  Plastic bottles or wrappers
 
--   The presentation is created using the Quarto CLI
+-   Location of the interceptors will affect its trash collection amount and types.
 
--   `##` sets the start of a new slide
-
-## Layouts
-
-You can use plain text
-
-::: columns
-::: {.column width="40%"}
--   or bullet points[^1]
-:::
-
-::: {.column width="60%"}
-or in two columns
-:::
-:::
-
-[^1]: And add footnotes
-
--   like
-
--   this
-
-## Code
-
-```{r, echo=FALSE}
-model <- lm(mpg ~ speed, data = mtcars) 
-
-model |> tidy()
-
-model |> glance()
-
-```
-
-## Plots
-
-```{r}
-penguins |>
-  mutate(species = ifelse(species == "Adelie", "Adelie", "Other")) |>
-  ggplot(aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
-  geom_point()
-```
-
-## Plot and text
-
-::: columns
-::: {.column width="50%"}
--   Some text
-
--   goes here
-:::
-
-::: {.column width="50%"}
-```{r, warning=FALSE, fig.width=5.5}
-penguins |>
-  ggplot(aes(x = bill_length_mm, y = species, color = species)) +
-  geom_boxplot(linewidth = 0.75,
-               outlier.size = 2.5) +
-  theme_minimal(base_size = 15) +
-  theme(legend.key.size = unit(0.8, "cm"))
-```
-:::
-:::
-
-# A new section...
-
-## Tables
-
-If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
-
-```{r}
-penguins |> 
-  head() |>
-  kableExtra::kable() |>
-  kableExtra::kable_styling()
-```
-
-## Images
-
-![Image credit: Danielle Navarro, Percolate.](images/watercolour_sys02_img34_teacup-ocean.png){fig-align="center" width="500"}
-
-## Math Expressions {.smaller}
-
-You can write LaTeX math expressions inside a pair of dollar signs, e.g. \$\\alpha+\\beta\$ renders $\alpha + \beta$. You can use the display style with double dollar signs:
-
-```         
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-```
-
-$$
-\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i
-$$
-
-Limitations:
-
-1.  The source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting `$$` must appear in the very beginning of a line, followed immediately by a non-space character, and the ending `$$` must be at the end of a line, led by a non-space character;
-
-2.  There should not be spaces after the opening `$` or before the closing `$`.
-
-# Wrap up
-
-## Feeling adventurous?
-
--   You are welcomed to use the default styling of the slides. In fact, that's what I expect majority of you will do. You will differentiate yourself with the content of your presentation.
-
--   But some of you might want to play around with slide styling. Some solutions for this can be found at https://quarto.org/docs/presentations/revealjs.
+-   Further investigation on why there was a drastic increase in trash collected by Gwynnda Trash Wheel in Dec 2023.

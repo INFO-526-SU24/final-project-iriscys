@@ -6,10 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Team Name">
-<meta name="description" content="Project description">
+<meta name="author" content="Iris Sum">
+<meta name="description" content="This project review the distribution of trash collected by Mr. Trash Wheel in 2023.">
 
-<title>Project Title - Proposal title</title>
+<title>Project Title - Distribution on the amount of trash collected by Mr. Trash Wheel in 2023</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -4539,7 +4539,10 @@ vertical-align: -.125em;
   <ul>
   <li><a href="#dataset" id="toc-dataset" class="nav-link active" data-scroll-target="#dataset">Dataset</a></li>
   <li><a href="#questions" id="toc-questions" class="nav-link" data-scroll-target="#questions">Questions</a></li>
-  <li><a href="#analysis-plan" id="toc-analysis-plan" class="nav-link" data-scroll-target="#analysis-plan">Analysis plan</a></li>
+  <li><a href="#analysis-plan" id="toc-analysis-plan" class="nav-link" data-scroll-target="#analysis-plan">Analysis plan</a>
+  <ul class="collapse">
+  <li><a href="#plan-of-attack" id="toc-plan-of-attack" class="nav-link" data-scroll-target="#plan-of-attack">Plan of Attack:</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -4548,13 +4551,13 @@ vertical-align: -.125em;
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Proposal title</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title">Distribution on the amount of trash collected by Mr. Trash Wheel in 2023</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 <p class="subtitle lead">Proposal</p>
 </div>
 
 <div>
   <div class="description">
-    Project description
+    This project review the distribution of trash collected by Mr. Trash Wheel in 2023.
   </div>
 </div>
 
@@ -4563,7 +4566,7 @@ vertical-align: -.125em;
   <div class="quarto-title-meta-heading">Affiliation</div>
   
     <div class="quarto-title-meta-contents">
-    <p class="author">Team Name </p>
+    <p class="author">Iris Sum </p>
   </div>
     <div class="quarto-title-meta-contents">
         <p class="affiliation">
@@ -4583,26 +4586,150 @@ vertical-align: -.125em;
 </header>
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;pacman&quot;</span>)) </span>
+<span id="cb1-2"><a href="#cb1-2"></a>  <span class="fu">install.packages</span>(<span class="st">&quot;pacman&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a>  </span>
+<span id="cb1-4"><a href="#cb1-4"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(here,</span>
+<span id="cb1-5"><a href="#cb1-5"></a>               tidytuesdayR,</span>
+<span id="cb1-6"><a href="#cb1-6"></a>               tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 <section id="dataset" class="level2">
 <h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
-<p>A brief description of your dataset including its provenance, dimensions, etc. as well as the reason why you chose this dataset.</p>
-<p>Make sure to load the data and use inline code for some of this information.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">rm</span>(<span class="at">list=</span><span class="fu">ls</span>())</span>
+<span id="cb2-2"><a href="#cb2-2"></a>dffile <span class="ot">&lt;-</span> tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="st">&#39;2024-03-05&#39;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a>df <span class="ot">&lt;-</span> dffile<span class="sc">$</span>trashwheel <span class="co"># load data set</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The <code>trashwheel</code> dataset provided by Mr. Trash Wheel, one of the four Trash Wheels in the Healthy Harbor initiative, was selected from Tidy Tuesday 2024 for this project. It records the data of the trash collected by the four semi-autonomous trash interceptors placed at the end of a river, stream or other outfall, namely the <em>Mister Trash Wheel</em>, <em>the Professor Trash Wheel</em>, <em>the Captain Trash Wheel</em> and <em>the Gwynnda Trash Wheel</em> from 2014 to 2023.</p>
+<p>Since the trash wheel started operating from 2014, there were nearly 2,362 tons of trash collected, which equal to the weight of 15 whales! Among those collected trash, there were over 13 millions of cigarette butts. It really helps saving our ocean from toxic plastic pollution.</p>
+<p>There are 16 variables with 993 records in the dataset. Each observation represents a dumpster from one of the four trash interceptors, and its related values such as the date of collection, weight, volume and the number of different trash collected. In total 7 types of trash are recorded as attributes and the collection amount are stored as numerical data: <code>PlasticBottles</code>, <code>Polystyrene</code>, <code>CigaretteButts</code>, <code>GlassBottles</code>, <code>PlasticBags</code>, <code>Wrappers</code>, <code>SportsBalls</code>.</p>
+<p>The selection of dataset was based on its cleanliness, simplicity, and meaningfulness. It is astonishing when looking into the amount of trash that has been disposed into rivers and the impressive collection capacity of the trash wheels. The objective of this project is to present the dataset in a clean and eye-catching manner in order to engage individuals in the issue of trash pollution and appreciate the endeavors dedicated to preserving the environment from trash.</p>
 </section>
 <section id="questions" class="level2">
 <h2 class="anchored" data-anchor-id="questions">Questions</h2>
-<p>The two questions you want to answer.</p>
+<p>What is the distribution of trash collected by Mr. Trash Wheel in 2023?</p>
 </section>
 <section id="analysis-plan" class="level2">
 <h2 class="anchored" data-anchor-id="analysis-plan">Analysis plan</h2>
-<ul>
-<li>A plan for answering each of the questions including the variables involved, variables to be created (if any), external data to be merged in (if any).</li>
-</ul>
+<p>This project will review the distribution of trash collected by Mr. Trash Wheel in 2023 from two aspects: by the types of the trash collected and by the trash interceptors. The data wrangling will mainly rely on <code>tidyverse</code> library.</p>
+<p>Attributes used for the project (filtered by 2023):</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>  <span class="fu">filter</span>(Year <span class="sc">==</span> <span class="dv">2023</span>) <span class="sc">|&gt;</span> <span class="co"># filter the dataset in 2022</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>  <span class="fu">select</span>(Name, Month, PlasticBottles, Polystyrene, CigaretteButts, GlassBottles, PlasticBags, Wrappers, SportsBalls) <span class="co"># select related atributes for analysis</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="fu">glimpse</span>(df) <span class="co"># take a look of the filtered dataset</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 165
+Columns: 9
+$ Name           &lt;chr&gt; &quot;Mister Trash Wheel&quot;, &quot;Mister Trash Wheel&quot;, &quot;Mister Tra…
+$ Month          &lt;chr&gt; &quot;January&quot;, &quot;February&quot;, &quot;February&quot;, &quot;March&quot;, &quot;March&quot;, &quot;A…
+$ PlasticBottles &lt;dbl&gt; 1700, 2400, 3600, 2700, 2900, 1800, 2200, 3000, 2100, 1…
+$ Polystyrene    &lt;dbl&gt; 210, 300, 280, 180, 200, 90, 210, 280, 200, 64, 190, 42…
+$ CigaretteButts &lt;dbl&gt; 2900, 3300, 4200, 3200, 3000, 2400, 3800, 4000, 3300, 1…
+$ GlassBottles   &lt;dbl&gt; 15, 21, 24, 18, 20, 16, 30, 22, 21, 10, 32, 27, 40, 36,…
+$ PlasticBags    &lt;dbl&gt; 180, 210, 240, 270, 200, 170, 280, 320, 260, 120, 340, …
+$ Wrappers       &lt;dbl&gt; 1500, 1100, 2200, 1700, 1400, 980, 1800, 2100, 2100, 90…
+$ SportsBalls    &lt;dbl&gt; 10, 21, 30, 20, 14, 11, 28, 18, 24, 9, 32, 40, 21, 27, …</code></pre>
+</div>
+</div>
+<section id="plot-1" class="level4">
+<h4 class="anchored" data-anchor-id="plot-1">Plot 1:</h4>
+<p>From types of the trash collected perspective, separate plots by <code>geom_pictogram()</code> will be created for each trash interceptor. It aims to visualized the proportion of differ trash collected by each trash interceptor clearly for comparison, with the use of icons to represent different trash types instead of single image with <code>geom_waffle()</code>.</p>
+<p>The variables involved in this plot will be <code>Name</code> containing the name of interceptors, and the 7 trash type variables. The dataset will first be filtered by <code>Year</code> 2023, followed by transferring all trash column names into a new variable <code>trash_type</code> with <code>trash_amount</code> storing the numeric amount of each trash by using <code>pivot_longer()</code>. Then the data will be <code>group_by()</code> <code>Name</code> and <code>trash_type</code>, and calculate the sum of trash collected with <code>summarise()</code>.</p>
+</section>
+<section id="plot-2" class="level4">
+<h4 class="anchored" data-anchor-id="plot-2">Plot 2:</h4>
+<p>On the other hand, a plot by <code>geom_col()</code> with x-axis equals to <code>Month</code> and y-axis equal to <code>total_trash</code> will be created to show the change of trash amount collected by each trash interceptor with dodged columns throughout the year 2023. To do this, after filtering the dataset with <code>Year</code> 2023, variables <code>Name</code>, <code>Month</code>, and the 7 trash type variables will be selected. A new variable <code>total_trash</code> will be added by summing up all trash amount collected by each trash interceptor rowwisely.</p>
+<p>For statistical analysis, ANOVA will be used for observing the variance between total trash amount by each trash interceptor throughout the year. To prepare the data matrix for this, the cleaned data from plot 2 will be used by removing <code>Month</code> and the 7 trash type variables, remaining <code>Name</code> and <code>total_trash</code>. ANOVA will be performed with <code>aov()</code> and the result will be interpreted in Discussion section with information from plot 2.</p>
+</section>
+<section id="plan-of-attack" class="level3">
+<h3 class="anchored" data-anchor-id="plan-of-attack">Plan of Attack:</h3>
+<table class="table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 8%">
+<col style="width: 6%">
+<col style="width: 7%">
+<col style="width: 49%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Task Name</th>
+<th style="text-align: center;">Status</th>
+<th style="text-align: center;">Due</th>
+<th style="text-align: center;">Priority</th>
+<th style="text-align: center;">Summary</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Draft of proposal</td>
+<td style="text-align: center;">Complete</td>
+<td style="text-align: center;">26-May</td>
+<td style="text-align: center;">High</td>
+<td style="text-align: center;"><p>Choose of dataset.</p>
+<p>Decide project questions and variables used.</p></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Finalize project outline</td>
+<td style="text-align: center;">Complete</td>
+<td style="text-align: center;">3-Jun</td>
+<td style="text-align: center;">High</td>
+<td style="text-align: center;">Amend the <code>proposal.qmd</code> with feedbacks from classmates and professor</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Complete waffle plot for part 1</td>
+<td style="text-align: center;">Incomplete</td>
+<td style="text-align: center;">15-Jun</td>
+<td style="text-align: center;">Moderate</td>
+<td style="text-align: center;">Complete waffle plot and its interpretation</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Complete bar chart for part 2</td>
+<td style="text-align: center;">Incomplete</td>
+<td style="text-align: center;">18-Jun</td>
+<td style="text-align: center;">Moderate</td>
+<td style="text-align: center;">Complete bar chart and its interpretation</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Finalize the report</td>
+<td style="text-align: center;">Incomplete</td>
+<td style="text-align: center;">20-Jun</td>
+<td style="text-align: center;">Low</td>
+<td style="text-align: center;">Finalize the <code>index.qmd</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Finalize the presentable materials</td>
+<td style="text-align: center;">Incomplete</td>
+<td style="text-align: center;">20-Jun</td>
+<td style="text-align: center;">Low</td>
+<td style="text-align: center;">Finalize the <code>presentation.qmd</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Record the presentation</td>
+<td style="text-align: center;">Incomplete</td>
+<td style="text-align: center;">24-Jun</td>
+<td style="text-align: center;">Low</td>
+<td style="text-align: center;">Complete the presentation</td>
+</tr>
+</tbody>
+</table>
 
 
 <!-- -->
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -5070,50 +5197,113 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class>
-<div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">---</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="an">title:</span><span class="co"> &quot;Proposal title&quot;</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="an">subtitle:</span><span class="co"> &quot;Proposal&quot;</span></span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="an">author:</span><span class="co"> </span></span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="co">  - name: &quot;Team Name&quot;</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="co">    affiliations:</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="co">      - name: &quot;School of Information, University of Arizona&quot;</span></span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="an">description:</span><span class="co"> &quot;Project description&quot;</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a><span class="an">format:</span></span>
-<span id="cb2-10"><a href="#cb2-10"></a><span class="co">  html:</span></span>
-<span id="cb2-11"><a href="#cb2-11"></a><span class="co">    code-tools: true</span></span>
-<span id="cb2-12"><a href="#cb2-12"></a><span class="co">    code-overflow: wrap</span></span>
-<span id="cb2-13"><a href="#cb2-13"></a><span class="co">    code-line-numbers: true</span></span>
-<span id="cb2-14"><a href="#cb2-14"></a><span class="co">    embed-resources: true</span></span>
-<span id="cb2-15"><a href="#cb2-15"></a><span class="an">editor:</span><span class="co"> visual</span></span>
-<span id="cb2-16"><a href="#cb2-16"></a><span class="an">code-annotations:</span><span class="co"> hover</span></span>
-<span id="cb2-17"><a href="#cb2-17"></a><span class="an">execute:</span></span>
-<span id="cb2-18"><a href="#cb2-18"></a><span class="co">  warning: false</span></span>
-<span id="cb2-19"><a href="#cb2-19"></a><span class="co">---</span></span>
-<span id="cb2-20"><a href="#cb2-20"></a></span>
-<span id="cb2-23"><a href="#cb2-23"></a><span class="in">```{r}</span></span>
-<span id="cb2-24"><a href="#cb2-24"></a><span class="co">#| label: load-pkgs</span></span>
-<span id="cb2-25"><a href="#cb2-25"></a><span class="co">#| message: false</span></span>
-<span id="cb2-26"><a href="#cb2-26"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb2-27"><a href="#cb2-27"></a><span class="in">```</span></span>
-<span id="cb2-28"><a href="#cb2-28"></a></span>
-<span id="cb2-29"><a href="#cb2-29"></a><span class="fu">## Dataset</span></span>
-<span id="cb2-30"><a href="#cb2-30"></a></span>
-<span id="cb2-33"><a href="#cb2-33"></a><span class="in">```{r}</span></span>
-<span id="cb2-34"><a href="#cb2-34"></a><span class="co">#| label: load-dataset</span></span>
-<span id="cb2-35"><a href="#cb2-35"></a><span class="co">#| message: false</span></span>
-<span id="cb2-36"><a href="#cb2-36"></a><span class="in">```</span></span>
-<span id="cb2-37"><a href="#cb2-37"></a></span>
-<span id="cb2-38"><a href="#cb2-38"></a>A brief description of your dataset including its provenance, dimensions, etc. as well as the reason why you chose this dataset.</span>
-<span id="cb2-39"><a href="#cb2-39"></a></span>
-<span id="cb2-40"><a href="#cb2-40"></a>Make sure to load the data and use inline code for some of this information.</span>
-<span id="cb2-41"><a href="#cb2-41"></a></span>
-<span id="cb2-42"><a href="#cb2-42"></a><span class="fu">## Questions</span></span>
-<span id="cb2-43"><a href="#cb2-43"></a></span>
-<span id="cb2-44"><a href="#cb2-44"></a>The two questions you want to answer.</span>
-<span id="cb2-45"><a href="#cb2-45"></a></span>
-<span id="cb2-46"><a href="#cb2-46"></a><span class="fu">## Analysis plan</span></span>
-<span id="cb2-47"><a href="#cb2-47"></a></span>
-<span id="cb2-48"><a href="#cb2-48"></a><span class="ss">-   </span>A plan for answering each of the questions including the variables involved, variables to be created (if any), external data to be merged in (if any).</span>
+<div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">---</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="an">title:</span><span class="co"> &quot;Distribution on the amount of trash collected by Mr. Trash Wheel in 2023&quot;</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="an">subtitle:</span><span class="co"> &quot;Proposal&quot;</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="an">author:</span><span class="co"> </span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">  - name: &quot;Iris Sum&quot;</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">    affiliations:</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co">      - name: &quot;School of Information, University of Arizona&quot;</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="an">description:</span><span class="co"> &quot;This project review the distribution of trash collected by Mr. Trash Wheel in 2023.&quot;</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="an">format:</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="co">  html:</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="co">    code-tools: true</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="co">    code-overflow: wrap</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="co">    code-line-numbers: true</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="co">    embed-resources: true</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a><span class="co">    code-fold: true</span></span>
+<span id="cb5-16"><a href="#cb5-16"></a><span class="an">editor:</span><span class="co"> visual</span></span>
+<span id="cb5-17"><a href="#cb5-17"></a><span class="an">code-annotations:</span><span class="co"> hover</span></span>
+<span id="cb5-18"><a href="#cb5-18"></a><span class="an">execute:</span></span>
+<span id="cb5-19"><a href="#cb5-19"></a><span class="co">  warning: false</span></span>
+<span id="cb5-20"><a href="#cb5-20"></a><span class="co">  message: false</span></span>
+<span id="cb5-21"><a href="#cb5-21"></a><span class="co">  error: false</span></span>
+<span id="cb5-22"><a href="#cb5-22"></a><span class="co">---</span></span>
+<span id="cb5-23"><a href="#cb5-23"></a></span>
+<span id="cb5-26"><a href="#cb5-26"></a><span class="in">```{r}</span></span>
+<span id="cb5-27"><a href="#cb5-27"></a><span class="co">#| label: load-pkgs</span></span>
+<span id="cb5-28"><a href="#cb5-28"></a></span>
+<span id="cb5-29"><a href="#cb5-29"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;pacman&quot;</span>)) </span>
+<span id="cb5-30"><a href="#cb5-30"></a>  <span class="fu">install.packages</span>(<span class="st">&quot;pacman&quot;</span>)</span>
+<span id="cb5-31"><a href="#cb5-31"></a>  </span>
+<span id="cb5-32"><a href="#cb5-32"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(here,</span>
+<span id="cb5-33"><a href="#cb5-33"></a>               tidytuesdayR,</span>
+<span id="cb5-34"><a href="#cb5-34"></a>               tidyverse)</span>
+<span id="cb5-35"><a href="#cb5-35"></a><span class="in">```</span></span>
+<span id="cb5-36"><a href="#cb5-36"></a></span>
+<span id="cb5-37"><a href="#cb5-37"></a><span class="fu">## Dataset</span></span>
+<span id="cb5-38"><a href="#cb5-38"></a></span>
+<span id="cb5-41"><a href="#cb5-41"></a><span class="in">```{r}</span></span>
+<span id="cb5-42"><a href="#cb5-42"></a><span class="co">#| label: load-dataset</span></span>
+<span id="cb5-43"><a href="#cb5-43"></a><span class="co">#| results: false</span></span>
+<span id="cb5-44"><a href="#cb5-44"></a></span>
+<span id="cb5-45"><a href="#cb5-45"></a><span class="fu">rm</span>(<span class="at">list=</span><span class="fu">ls</span>())</span>
+<span id="cb5-46"><a href="#cb5-46"></a>dffile <span class="ot">&lt;-</span> tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="st">&#39;2024-03-05&#39;</span>)</span>
+<span id="cb5-47"><a href="#cb5-47"></a></span>
+<span id="cb5-48"><a href="#cb5-48"></a>df <span class="ot">&lt;-</span> dffile<span class="sc">$</span>trashwheel <span class="co"># load data set</span></span>
+<span id="cb5-49"><a href="#cb5-49"></a><span class="in">```</span></span>
+<span id="cb5-50"><a href="#cb5-50"></a></span>
+<span id="cb5-51"><a href="#cb5-51"></a>The <span class="in">`trashwheel`</span> dataset provided by Mr. Trash Wheel, one of the four Trash Wheels in the Healthy Harbor initiative, was selected from Tidy Tuesday 2024 for this project. It records the data of the trash collected by the four semi-autonomous trash interceptors placed at the end of a river, stream or other outfall, namely the *Mister Trash Wheel*, *the Professor Trash Wheel*, *the Captain Trash Wheel* and *the Gwynnda Trash Wheel* from 2014 to 2023.</span>
+<span id="cb5-52"><a href="#cb5-52"></a></span>
+<span id="cb5-53"><a href="#cb5-53"></a>Since the trash wheel started operating from 2014, there were nearly 2,362 tons of trash collected, which equal to the weight of 15 whales! Among those collected trash, there were over 13 millions of cigarette butts. It really helps saving our ocean from toxic plastic pollution.</span>
+<span id="cb5-54"><a href="#cb5-54"></a></span>
+<span id="cb5-55"><a href="#cb5-55"></a>There are 16 variables with 993 records in the dataset. Each observation represents a dumpster from one of the four trash interceptors, and its related values such as the date of collection, weight, volume and the number of different trash collected. In total 7 types of trash are recorded as attributes and the collection amount are stored as numerical data: <span class="in">`PlasticBottles`</span>, <span class="in">`Polystyrene`</span>, <span class="in">`CigaretteButts`</span>, <span class="in">`GlassBottles`</span>, <span class="in">`PlasticBags`</span>, <span class="in">`Wrappers`</span>, <span class="in">`SportsBalls`</span>.</span>
+<span id="cb5-56"><a href="#cb5-56"></a></span>
+<span id="cb5-57"><a href="#cb5-57"></a>The selection of dataset was based on its cleanliness, simplicity, and meaningfulness. It is astonishing when looking into the amount of trash that has been disposed into rivers and the impressive collection capacity of the trash wheels. The objective of this project is to present the dataset in a clean and eye-catching manner in order to engage individuals in the issue of trash pollution and appreciate the endeavors dedicated to preserving the environment from trash.</span>
+<span id="cb5-58"><a href="#cb5-58"></a></span>
+<span id="cb5-59"><a href="#cb5-59"></a><span class="fu">## Questions</span></span>
+<span id="cb5-60"><a href="#cb5-60"></a></span>
+<span id="cb5-61"><a href="#cb5-61"></a>What is the distribution of trash collected by Mr. Trash Wheel in 2023?</span>
+<span id="cb5-62"><a href="#cb5-62"></a></span>
+<span id="cb5-63"><a href="#cb5-63"></a><span class="fu">## Analysis plan</span></span>
+<span id="cb5-64"><a href="#cb5-64"></a></span>
+<span id="cb5-65"><a href="#cb5-65"></a>This project will review the distribution of trash collected by Mr. Trash Wheel in 2023 from two aspects: by the types of the trash collected and by the trash interceptors. The data wrangling will mainly rely on <span class="in">`tidyverse`</span> library.</span>
+<span id="cb5-66"><a href="#cb5-66"></a></span>
+<span id="cb5-67"><a href="#cb5-67"></a>Attributes used for the project (filtered by 2023):</span>
+<span id="cb5-68"><a href="#cb5-68"></a></span>
+<span id="cb5-71"><a href="#cb5-71"></a><span class="in">```{r}</span></span>
+<span id="cb5-72"><a href="#cb5-72"></a><span class="co">#| label: attribute-selection</span></span>
+<span id="cb5-73"><a href="#cb5-73"></a></span>
+<span id="cb5-74"><a href="#cb5-74"></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
+<span id="cb5-75"><a href="#cb5-75"></a>  <span class="fu">filter</span>(Year <span class="sc">==</span> <span class="dv">2023</span>) <span class="sc">|&gt;</span> <span class="co"># filter the dataset in 2022</span></span>
+<span id="cb5-76"><a href="#cb5-76"></a>  <span class="fu">select</span>(Name, Month, PlasticBottles, Polystyrene, CigaretteButts, GlassBottles, PlasticBags, Wrappers, SportsBalls) <span class="co"># select related atributes for analysis</span></span>
+<span id="cb5-77"><a href="#cb5-77"></a></span>
+<span id="cb5-78"><a href="#cb5-78"></a><span class="fu">glimpse</span>(df) <span class="co"># take a look of the filtered dataset</span></span>
+<span id="cb5-79"><a href="#cb5-79"></a><span class="in">```</span></span>
+<span id="cb5-80"><a href="#cb5-80"></a></span>
+<span id="cb5-81"><a href="#cb5-81"></a><span class="fu">#### Plot 1:</span></span>
+<span id="cb5-82"><a href="#cb5-82"></a></span>
+<span id="cb5-83"><a href="#cb5-83"></a>From types of the trash collected perspective, separate plots by <span class="in">`geom_pictogram()`</span> will be created for each trash interceptor. It aims to visualized the proportion of differ trash collected by each trash interceptor clearly for comparison, with the use of icons to represent different trash types instead of single image with <span class="in">`geom_waffle()`</span>.</span>
+<span id="cb5-84"><a href="#cb5-84"></a></span>
+<span id="cb5-85"><a href="#cb5-85"></a>The variables involved in this plot will be <span class="in">`Name`</span> containing the name of interceptors, and the 7 trash type variables. The dataset will first be filtered by <span class="in">`Year`</span> 2023, followed by transferring all trash column names into a new variable <span class="in">`trash_type`</span> with <span class="in">`trash_amount`</span> storing the numeric amount of each trash by using <span class="in">`pivot_longer()`</span>. Then the data will be <span class="in">`group_by()`</span> <span class="in">`Name`</span> and <span class="in">`trash_type`</span>, and calculate the sum of trash collected with <span class="in">`summarise()`</span>.</span>
+<span id="cb5-86"><a href="#cb5-86"></a></span>
+<span id="cb5-87"><a href="#cb5-87"></a><span class="fu">#### Plot 2:</span></span>
+<span id="cb5-88"><a href="#cb5-88"></a></span>
+<span id="cb5-89"><a href="#cb5-89"></a>On the other hand, a plot by <span class="in">`geom_col()`</span> with x-axis equals to <span class="in">`Month`</span> and y-axis equal to <span class="in">`total_trash`</span> will be created to show the change of trash amount collected by each trash interceptor with dodged columns throughout the year 2023. To do this, after filtering the dataset with <span class="in">`Year`</span> 2023, variables <span class="in">`Name`</span>, <span class="in">`Month`</span>, and the 7 trash type variables will be selected. A new variable <span class="in">`total_trash`</span> will be added by summing up all trash amount collected by each trash interceptor rowwisely.</span>
+<span id="cb5-90"><a href="#cb5-90"></a></span>
+<span id="cb5-91"><a href="#cb5-91"></a>For statistical analysis, ANOVA will be used for observing the variance between total trash amount by each trash interceptor throughout the year. To prepare the data matrix for this, the cleaned data from plot 2 will be used by removing <span class="in">`Month`</span> and the 7 trash type variables, remaining <span class="in">`Name`</span> and <span class="in">`total_trash`</span>. ANOVA will be performed with <span class="in">`aov()`</span> and the result will be interpreted in Discussion section with information from plot 2.</span>
+<span id="cb5-92"><a href="#cb5-92"></a></span>
+<span id="cb5-93"><a href="#cb5-93"></a><span class="fu">### Plan of Attack:</span></span>
+<span id="cb5-94"><a href="#cb5-94"></a></span>
+<span id="cb5-95"><a href="#cb5-95"></a>+------------------------------------+------------+--------+----------+-----------------------------------------------------------------------+</span>
+<span id="cb5-96"><a href="#cb5-96"></a>| Task Name                          | Status     | Due    | Priority | Summary                                                               |</span>
+<span id="cb5-97"><a href="#cb5-97"></a>+:==================================:+:==========:+:======:+:========:+:=====================================================================:+</span>
+<span id="cb5-98"><a href="#cb5-98"></a>| Draft of proposal                  | Complete   | 26-May | High     | Choose of dataset.                                                    |</span>
+<span id="cb5-99"><a href="#cb5-99"></a>|                                    |            |        |          |                                                                       |</span>
+<span id="cb5-100"><a href="#cb5-100"></a>|                                    |            |        |          | Decide project questions and variables used.                          |</span>
+<span id="cb5-101"><a href="#cb5-101"></a>+------------------------------------+------------+--------+----------+-----------------------------------------------------------------------+</span>
+<span id="cb5-102"><a href="#cb5-102"></a>| Finalize project outline           | Complete   | 3-Jun  | High     | Amend the <span class="in">`proposal.qmd`</span> with feedbacks from classmates and professor |</span>
+<span id="cb5-103"><a href="#cb5-103"></a>+------------------------------------+------------+--------+----------+-----------------------------------------------------------------------+</span>
+<span id="cb5-104"><a href="#cb5-104"></a>| Complete waffle plot for part 1    | Incomplete | 15-Jun | Moderate | Complete waffle plot and its interpretation                           |</span>
+<span id="cb5-105"><a href="#cb5-105"></a>+------------------------------------+------------+--------+----------+-----------------------------------------------------------------------+</span>
+<span id="cb5-106"><a href="#cb5-106"></a>| Complete bar chart for part 2      | Incomplete | 18-Jun | Moderate | Complete bar chart and its interpretation                             |</span>
+<span id="cb5-107"><a href="#cb5-107"></a>+------------------------------------+------------+--------+----------+-----------------------------------------------------------------------+</span>
+<span id="cb5-108"><a href="#cb5-108"></a>| Finalize the report                | Incomplete | 20-Jun | Low      | Finalize the <span class="in">`index.qmd`</span>                                              |</span>
+<span id="cb5-109"><a href="#cb5-109"></a>+------------------------------------+------------+--------+----------+-----------------------------------------------------------------------+</span>
+<span id="cb5-110"><a href="#cb5-110"></a>| Finalize the presentable materials | Incomplete | 20-Jun | Low      | Finalize the <span class="in">`presentation.qmd`</span>                                       |</span>
+<span id="cb5-111"><a href="#cb5-111"></a>+------------------------------------+------------+--------+----------+-----------------------------------------------------------------------+</span>
+<span id="cb5-112"><a href="#cb5-112"></a>| Record the presentation            | Incomplete | 24-Jun | Low      | Complete the presentation                                             |</span>
+<span id="cb5-113"><a href="#cb5-113"></a>+------------------------------------+------------+--------+----------+-----------------------------------------------------------------------+</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
