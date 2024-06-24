@@ -4624,7 +4624,7 @@ vertical-align: -.125em;
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>  <span class="fu">filter</span>(Year <span class="sc">==</span> <span class="dv">2023</span>) <span class="sc">|&gt;</span> <span class="co"># filter the dataset in 2022</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>  <span class="fu">filter</span>(Year <span class="sc">==</span> <span class="dv">2023</span>) <span class="sc">|&gt;</span> <span class="co"># filter the dataset in 2023</span></span>
 <span id="cb3-3"><a href="#cb3-3"></a>  <span class="fu">select</span>(Name, Month, PlasticBottles, Polystyrene, CigaretteButts, GlassBottles, PlasticBags, Wrappers, SportsBalls) <span class="co"># select related atributes for analysis</span></span>
 <span id="cb3-4"><a href="#cb3-4"></a></span>
 <span id="cb3-5"><a href="#cb3-5"></a><span class="fu">glimpse</span>(df) <span class="co"># take a look of the filtered dataset</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -4658,10 +4658,10 @@ $ SportsBalls    &lt;dbl&gt; 10, 21, 30, 20, 14, 11, 28, 18, 24, 9, 32, 40, 21, 
 <table class="table">
 <colgroup>
 <col style="width: 25%">
-<col style="width: 8%">
+<col style="width: 7%">
 <col style="width: 6%">
 <col style="width: 7%">
-<col style="width: 49%">
+<col style="width: 50%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -4690,35 +4690,35 @@ $ SportsBalls    &lt;dbl&gt; 10, 21, 30, 20, 14, 11, 28, 18, 24, 9, 32, 40, 21, 
 </tr>
 <tr class="odd">
 <td style="text-align: center;">Complete waffle plot for part 1</td>
-<td style="text-align: center;">Incomplete</td>
+<td style="text-align: center;">Complete</td>
 <td style="text-align: center;">15-Jun</td>
 <td style="text-align: center;">Moderate</td>
 <td style="text-align: center;">Complete waffle plot and its interpretation</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">Complete bar chart for part 2</td>
-<td style="text-align: center;">Incomplete</td>
+<td style="text-align: center;">Complete</td>
 <td style="text-align: center;">18-Jun</td>
 <td style="text-align: center;">Moderate</td>
 <td style="text-align: center;">Complete bar chart and its interpretation</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">Finalize the report</td>
-<td style="text-align: center;">Incomplete</td>
+<td style="text-align: center;">Complete</td>
 <td style="text-align: center;">20-Jun</td>
 <td style="text-align: center;">Low</td>
 <td style="text-align: center;">Finalize the <code>index.qmd</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;">Finalize the presentable materials</td>
-<td style="text-align: center;">Incomplete</td>
+<td style="text-align: center;">Complete</td>
 <td style="text-align: center;">20-Jun</td>
 <td style="text-align: center;">Low</td>
 <td style="text-align: center;">Finalize the <code>presentation.qmd</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;">Record the presentation</td>
-<td style="text-align: center;">Incomplete</td>
+<td style="text-align: center;">Complete</td>
 <td style="text-align: center;">24-Jun</td>
 <td style="text-align: center;">Low</td>
 <td style="text-align: center;">Complete the presentation</td>
@@ -5265,7 +5265,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb5-72"><a href="#cb5-72"></a><span class="co">#| label: attribute-selection</span></span>
 <span id="cb5-73"><a href="#cb5-73"></a></span>
 <span id="cb5-74"><a href="#cb5-74"></a>df <span class="ot">&lt;-</span> df <span class="sc">|&gt;</span></span>
-<span id="cb5-75"><a href="#cb5-75"></a>  <span class="fu">filter</span>(Year <span class="sc">==</span> <span class="dv">2023</span>) <span class="sc">|&gt;</span> <span class="co"># filter the dataset in 2022</span></span>
+<span id="cb5-75"><a href="#cb5-75"></a>  <span class="fu">filter</span>(Year <span class="sc">==</span> <span class="dv">2023</span>) <span class="sc">|&gt;</span> <span class="co"># filter the dataset in 2023</span></span>
 <span id="cb5-76"><a href="#cb5-76"></a>  <span class="fu">select</span>(Name, Month, PlasticBottles, Polystyrene, CigaretteButts, GlassBottles, PlasticBags, Wrappers, SportsBalls) <span class="co"># select related atributes for analysis</span></span>
 <span id="cb5-77"><a href="#cb5-77"></a></span>
 <span id="cb5-78"><a href="#cb5-78"></a><span class="fu">glimpse</span>(df) <span class="co"># take a look of the filtered dataset</span></span>
@@ -5285,25 +5285,25 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb5-92"><a href="#cb5-92"></a></span>
 <span id="cb5-93"><a href="#cb5-93"></a><span class="fu">### Plan of Attack:</span></span>
 <span id="cb5-94"><a href="#cb5-94"></a></span>
-<span id="cb5-95"><a href="#cb5-95"></a>+------------------------------------+------------+--------+----------+-----------------------------------------------------------------------+</span>
-<span id="cb5-96"><a href="#cb5-96"></a>| Task Name                          | Status     | Due    | Priority | Summary                                                               |</span>
-<span id="cb5-97"><a href="#cb5-97"></a>+:==================================:+:==========:+:======:+:========:+:=====================================================================:+</span>
-<span id="cb5-98"><a href="#cb5-98"></a>| Draft of proposal                  | Complete   | 26-May | High     | Choose of dataset.                                                    |</span>
-<span id="cb5-99"><a href="#cb5-99"></a>|                                    |            |        |          |                                                                       |</span>
-<span id="cb5-100"><a href="#cb5-100"></a>|                                    |            |        |          | Decide project questions and variables used.                          |</span>
-<span id="cb5-101"><a href="#cb5-101"></a>+------------------------------------+------------+--------+----------+-----------------------------------------------------------------------+</span>
-<span id="cb5-102"><a href="#cb5-102"></a>| Finalize project outline           | Complete   | 3-Jun  | High     | Amend the <span class="in">`proposal.qmd`</span> with feedbacks from classmates and professor |</span>
-<span id="cb5-103"><a href="#cb5-103"></a>+------------------------------------+------------+--------+----------+-----------------------------------------------------------------------+</span>
-<span id="cb5-104"><a href="#cb5-104"></a>| Complete waffle plot for part 1    | Incomplete | 15-Jun | Moderate | Complete waffle plot and its interpretation                           |</span>
-<span id="cb5-105"><a href="#cb5-105"></a>+------------------------------------+------------+--------+----------+-----------------------------------------------------------------------+</span>
-<span id="cb5-106"><a href="#cb5-106"></a>| Complete bar chart for part 2      | Incomplete | 18-Jun | Moderate | Complete bar chart and its interpretation                             |</span>
-<span id="cb5-107"><a href="#cb5-107"></a>+------------------------------------+------------+--------+----------+-----------------------------------------------------------------------+</span>
-<span id="cb5-108"><a href="#cb5-108"></a>| Finalize the report                | Incomplete | 20-Jun | Low      | Finalize the <span class="in">`index.qmd`</span>                                              |</span>
-<span id="cb5-109"><a href="#cb5-109"></a>+------------------------------------+------------+--------+----------+-----------------------------------------------------------------------+</span>
-<span id="cb5-110"><a href="#cb5-110"></a>| Finalize the presentable materials | Incomplete | 20-Jun | Low      | Finalize the <span class="in">`presentation.qmd`</span>                                       |</span>
-<span id="cb5-111"><a href="#cb5-111"></a>+------------------------------------+------------+--------+----------+-----------------------------------------------------------------------+</span>
-<span id="cb5-112"><a href="#cb5-112"></a>| Record the presentation            | Incomplete | 24-Jun | Low      | Complete the presentation                                             |</span>
-<span id="cb5-113"><a href="#cb5-113"></a>+------------------------------------+------------+--------+----------+-----------------------------------------------------------------------+</span>
+<span id="cb5-95"><a href="#cb5-95"></a>+------------------------------------+----------+--------+----------+-----------------------------------------------------------------------+</span>
+<span id="cb5-96"><a href="#cb5-96"></a>| Task Name                          | Status   | Due    | Priority | Summary                                                               |</span>
+<span id="cb5-97"><a href="#cb5-97"></a>+:==================================:+:========:+:======:+:========:+:=====================================================================:+</span>
+<span id="cb5-98"><a href="#cb5-98"></a>| Draft of proposal                  | Complete | 26-May | High     | Choose of dataset.                                                    |</span>
+<span id="cb5-99"><a href="#cb5-99"></a>|                                    |          |        |          |                                                                       |</span>
+<span id="cb5-100"><a href="#cb5-100"></a>|                                    |          |        |          | Decide project questions and variables used.                          |</span>
+<span id="cb5-101"><a href="#cb5-101"></a>+------------------------------------+----------+--------+----------+-----------------------------------------------------------------------+</span>
+<span id="cb5-102"><a href="#cb5-102"></a>| Finalize project outline           | Complete | 3-Jun  | High     | Amend the <span class="in">`proposal.qmd`</span> with feedbacks from classmates and professor |</span>
+<span id="cb5-103"><a href="#cb5-103"></a>+------------------------------------+----------+--------+----------+-----------------------------------------------------------------------+</span>
+<span id="cb5-104"><a href="#cb5-104"></a>| Complete waffle plot for part 1    | Complete | 15-Jun | Moderate | Complete waffle plot and its interpretation                           |</span>
+<span id="cb5-105"><a href="#cb5-105"></a>+------------------------------------+----------+--------+----------+-----------------------------------------------------------------------+</span>
+<span id="cb5-106"><a href="#cb5-106"></a>| Complete bar chart for part 2      | Complete | 18-Jun | Moderate | Complete bar chart and its interpretation                             |</span>
+<span id="cb5-107"><a href="#cb5-107"></a>+------------------------------------+----------+--------+----------+-----------------------------------------------------------------------+</span>
+<span id="cb5-108"><a href="#cb5-108"></a>| Finalize the report                | Complete | 20-Jun | Low      | Finalize the <span class="in">`index.qmd`</span>                                              |</span>
+<span id="cb5-109"><a href="#cb5-109"></a>+------------------------------------+----------+--------+----------+-----------------------------------------------------------------------+</span>
+<span id="cb5-110"><a href="#cb5-110"></a>| Finalize the presentable materials | Complete | 20-Jun | Low      | Finalize the <span class="in">`presentation.qmd`</span>                                       |</span>
+<span id="cb5-111"><a href="#cb5-111"></a>+------------------------------------+----------+--------+----------+-----------------------------------------------------------------------+</span>
+<span id="cb5-112"><a href="#cb5-112"></a>| Record the presentation            | Complete | 24-Jun | Low      | Complete the presentation                                             |</span>
+<span id="cb5-113"><a href="#cb5-113"></a>+------------------------------------+----------+--------+----------+-----------------------------------------------------------------------+</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

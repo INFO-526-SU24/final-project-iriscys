@@ -1,11 +1,11 @@
 ---
-title: "Project Title"
+title: "Distribution on the amount of trash collected by Mr. Trash Wheel in 2023"
 subtitle: "INFO 526 - Summer 2024 - Final Project"
 author: 
-  - name: "Team name"
+  - name: "Iris Sum"
     affiliations:
       - name: "School of Information, University of Arizona"
-description: "Project description"
+description: "This project review the distribution of trash collected by Mr. Trash Wheel in 2023."
 format:
    html:
     code-tools: true
@@ -15,8 +15,287 @@ editor: visual
 execute:
   warning: false
   echo: false
+  message: false
 ---
 
-## Abstract
+```{r setup}
+#| label: load-package-setup
 
-Add project abstract here.
+if (!require("pacman")) 
+  install.packages("pacman")
+  
+pacman::p_load(
+  extrafont,
+  here,
+  imputeTS,
+  scales,
+  tidyverse,
+  waffle
+)
+
+# set width of code output
+options(width = 65)
+```
+
+## Introduction
+
+This project was based on the `trashwheel` dataset provided by Mr. Trash Wheel, one of the four Trash Wheels in the Healthy Harbor initiative, from Tidy Tuesday 2024. It recorded the data of the trash collected by the four semi-autonomous trash interceptors placed at the end of a river, stream or other outfall, namely the *Mister Trash Wheel*, *the Professor Trash Wheel*, *the Captain Trash Wheel* and *the Gwynnda Trash Wheel* from 2014 to 2023.
+
+There are 16 variables with 993 records in the dataset. Each observation represents a dumpster from one of the four trash interceptors, and its related values such as the date of collection, weight, volume and the number of different trash collected. In total 7 types of trash are recorded as attributes and the collection amount are stored as numerical data: `PlasticBottles`, `Polystyrene`, `CigaretteButts`, `GlassBottles`, `PlasticBags`, `Wrappers`, `SportsBalls`.
+
+## What is the distribution of trash collected by Mr. Trash Wheel in 2023?
+
+#### Introduction
+
+Since the trash wheel started operating from 2014, there were nearly 2,362 tons of trash collected, which equal to the weight of 15 whales! It will be interesting to know what kind of trash mainly involved and their amount. The latest data were examined in this project to find out the distribution of trash collected by Mr. Trash Wheel.
+
+To answer the project question, the dataset will first be filtered by `Year` equals to 2023. `Month`, `Name` representing the interceptors' name and their amount of trash collection including `lasticBottles`, `Polystyrene`, `CigaretteButts`, `GlassBottles`, `PlasticBags`, `Wrappers`, `SportsBalls` will be used for analysis.
+
+#### Approach
+
+Plot 1: From types of the trash collected perspective, separate plots by `geom_pictogram()` will be created for each trash interceptor. It aims to visualized the proportion of differ trash collected by each trash interceptor clearly for comparison, with the use of icons to represent different trash types instead of single image (like a square or circle) with `geom_waffle()`.
+
+Plot 2: A plot by `geom_col()` with y-axis equals to `Month` and x-axis equal to `total_trash` will be created to show the change of trash amount collected by each trash interceptor with dodged columns throughout the year 2023. The amount of trash collected by each interceptor can be compared easily side by side, and the trend of trash collection can be observed in this bar plot.
+
+#### Analysis
+
+```{r}
+#| label: final-plot1-data
+
+df <- read.csv(here("data", "trashwheel.csv")) # load data set
+
+### clean data set for plot 1
+trash_lv <- c("Cigarette Butts", "Glass Bottles", "Plastic Bags", "Plastic Bottles",
+              "Polystyrene", "Sports Balls", "Wrappers") # for trash factor level
+
+df1 <- df |>
+  filter(Year == 2023) |> # filter data in 2023
+  select(Name, Month, PlasticBottles, Polystyrene, CigaretteButts, GlassBottles,
+         PlasticBags, Wrappers, SportsBalls) |> # select related attibutes
+  mutate_if(is.numeric, ~replace_na(., 0)) |> # replace NA value with 0
+  pivot_longer( # turn 7 trash type column into 1 column
+    cols = c("PlasticBottles", "Polystyrene", "CigaretteButts", "GlassBottles",
+             "PlasticBags", "Wrappers", "SportsBalls"),
+    names_to = "trash_type",
+    values_to = "trash_amount"
+  ) |>
+  mutate(trash_type = case_when(
+    trash_type == "PlasticBottles" ~ "Plastic Bottles",
+    trash_type == "CigaretteButts" ~ "Cigarette Butts",
+    trash_type == "GlassBottles" ~ "Glass Bottles",
+    trash_type == "PlasticBags" ~ "Plastic Bags",
+    trash_type == "SportsBalls" ~ "Sports Balls",
+    TRUE ~ trash_type
+  )) |>
+  group_by(Name, trash_type) |> # to see amount of trash by type for each wheel
+  summarise(trash_amount = sum(trash_amount)) |>
+  mutate(trash_type = fct_relevel(trash_type, trash_lv)) # set trash factor lv
+
+# calculate the total amount by wheel
+wheel_total <- df1 |>
+  group_by(Name) |>
+  summarise(total = sum(trash_amount))
+
+# calculate the percentage by trash type for each wheel
+df1 <- df1 |>
+  mutate( # add total trash amount by wheel
+    total_wheel = case_when(
+      Name == "Captain Trash Wheel" ~ wheel_total$total[wheel_total$Name == "Captain Trash Wheel"],
+      Name == "Gwynnda Trash Wheel" ~ wheel_total$total[wheel_total$Name == "Gwynnda Trash Wheel"],
+      Name == "Mister Trash Wheel" ~ wheel_total$total[wheel_total$Name == "Mister Trash Wheel"],
+      Name == "Professor Trash Wheel" ~ wheel_total$total[wheel_total$Name == "Professor Trash Wheel"]),
+    trash_pct = floor(trash_amount / total_wheel * 100) # calculate percentage
+  )
+
+# prepare icon list for the plot
+icon_ls <- c("smoking", "shopping-bag", "wine-bottle",
+             "hockey-puck", "box-open", "glass-whiskey", "basketball-ball")
+```
+
+```{r fig.width = 6, fig.asp = 0.8, fig.retina = 3, fig.align = "center", dpi = 300}
+#| fig-show: "hide"
+#| label: fig-final-plot1
+#| fig-cap: |
+#|   Proportion of trash collected by Mr. Trash Wheel in 2023
+
+# For first time geom_pictogram icon user may need to operate following steps to import the icon file:
+# waffle::install_fa_fonts() # check the location of font in your computer and install them
+# font_import() # import font to R
+# fa_grep("house") # check icon with keywords, eg. house
+# To know more: https://rud.is/rpubs/building-pictograms.html
+
+
+# create plot 1
+ggplot(df1, aes(label = trash_type, values = trash_pct)) +
+  geom_pictogram(
+    aes(color = trash_type),
+    make_proportional = TRUE,
+    size = 2.5,
+    flip = TRUE
+  ) +
+  scale_label_pictogram(
+    name = "",
+    values = icon_ls # different icon for different trash
+  ) +
+  scale_color_manual(name = "",
+                     values = c("#9bb996", "#81af9b", "#45ada8", "#547980", "#594f4f")) +
+  facet_wrap(~Name, nrow = 1,
+             labeller = labeller(Name = 
+                                   c("Captain Trash Wheel" = "Captain Trash Wheel\nTrash collected: 28,990",
+                                     "Gwynnda Trash Wheel" = "Gwynnda Trash Wheel\nTrash collected: 521,549",
+                                     "Mister Trash Wheel" = "Mister Trash Wheel\nTrash collected: 476,116",
+                                     "Professor Trash Wheel" = "Professor Trash Wheel\nTrash collected: 166,212"))
+  ) + # separate subplot by wheel
+  labs(
+    title = "Proportion of trash collected by Mr. Trash Wheel in 2023",
+    caption = "Source: Trash Wheel Collection Data from the Mr. Trash Wheel\nRetreived from Tidy Tuesday 2024"
+  ) +
+  coord_equal() +
+  theme_minimal() + 
+  theme_enhance_waffle() + # remove x & y axis
+  theme(legend.position = "bottom", # legend position
+        legend.text = element_text(hjust = 0, 
+                                   vjust = 0.7, 
+                                   size = 6),
+        plot.title = element_text(hjust = 0.5, 
+                                  size = 11),
+        plot.caption = element_text(size = 5),
+        strip.text = element_text(size = 6) # adjust subplots title size
+  )
+
+## just in case the first time user cannot generate the plot without installing & importing the font, a png of the plot is attached.
+```
+
+::: {#fig-plot1}
+![](images/plot_1.png){fig-align="center"}
+
+Proportion of trash collected by Mr. Trash Wheel in 2023
+:::
+
+```{r}
+#| label: final-plot2-data
+
+# clean data for plot 2
+df2 <- df |>
+  filter(Year == 2023) |> # filter data in 2023
+  select(Name, Month, PlasticBottles, Polystyrene, CigaretteButts, GlassBottles,
+         PlasticBags, Wrappers, SportsBalls) |> # select related attributes
+  mutate_if(is.numeric, ~replace_na(., 0)) |> # replace NA with 0
+  rowwise() |>
+  mutate( # calculate total trash by row
+    total_trash = sum(c(PlasticBottles, Polystyrene, CigaretteButts, GlassBottles,
+                      PlasticBags, Wrappers, SportsBalls))
+  ) |>
+  select(Name, Month, total_trash) |> # remove redundant columns
+  mutate(Month = case_when(
+    Month == "september" ~ "September",
+    TRUE ~ Month)
+  ) |>
+  group_by(Name, Month) |>
+  summarise(total_trash = sum(total_trash)) |>
+  ungroup() |>
+  complete( # some wheel do not have 12 month data, fill missing data with 0
+    Name, Month,
+    fill = list(total_trash = 0)) |>
+  mutate(
+    Month = case_when(
+      Month == "January" ~ 1,
+      Month == "February" ~ 2,
+      Month == "March" ~ 3,
+      Month == "April" ~ 4,
+      Month == "May" ~ 5,
+      Month == "June" ~ 6,
+      Month == "July" ~ 7,
+      Month == "August" ~ 8,
+      Month == "September" ~ 9,
+      Month == "October" ~ 10,
+      Month == "November" ~ 11,
+      Month == "December" ~ 12),
+    Month = month(Month)
+  ) 
+
+# df for background
+bg_line <- tibble(x = seq(0.5, 12.5, 1), 
+                     y = rep.int(0, 13),
+                     xend = seq(0.5, 12.5, 1),
+                     yend = rep.int(117000, 13))
+
+bg_text <- tibble(x_text = seq(1, 12, 1),
+                     label = c("JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+                               "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"))
+```
+
+```{r fig.width = 7, fig.asp = 0.618, fig.retina = 3, fig.align = "center", dpi = 300}
+#| label: fig-final-plot2
+#| fig-cap: |
+#|   Nubmer of trash collected by Mr. Trash Wheel in 2023 (by months)
+
+# create plot 2
+ggplot(df2) +
+  geom_segment(
+    data = bg_line,
+    aes(x = x, y = y, xend = xend, yend = yend),
+    color = "#bababa",
+    size = 0.1
+  ) +
+  geom_text( # add background text
+    data = bg_text,
+    aes(x = x_text, y = 115000, label = label),
+    hjust = 1,
+    size = 5, 
+    fontface = "bold", 
+    color = "#bababa"
+  ) +
+  geom_col( # add bar chart
+    aes(x = Month, 
+        y = total_trash, 
+        fill = Name),
+    position = "dodge",
+    width = 0.95
+    ) +
+  coord_flip(expand = FALSE) +
+  scale_y_continuous(labels = label_number(big.mark = ","),
+                     limits = c(-100, 117000)) +
+  scale_fill_manual(values = c("#0f0d0d", "#79402e", "#8d8680", "#ccba72")) +
+  labs(title = "Nubmer of trash collected by Mr. Trash Wheel in 2023 (by months)",
+       x = NULL,
+       y = NULL,
+       caption = "Source: Trash Wheel Collection Data from the Mr. Trash Wheel\nRetreived from Tidy Tuesday 2024",
+       fill = NULL) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 12),
+    plot.caption = element_text(size = 6),
+    panel.grid = element_blank(),
+    panel.grid.major.x = element_line(color = "#bababa", linetype = "dashed", size = 0.1),
+    axis.text.y = element_blank(),
+    legend.position = "top",
+    legend.key.size = unit(0.35, "cm"),
+    legend.text = element_text(size = 6),
+    aspect.ratio = 0.6
+  )
+```
+
+#### Discussion
+
+According to Figure 1, the majority of trash collected by all interceptors is cigarette butts, followed by plastic bottles or wrappers. The tiny size of the cigarette facilitates its disposal into canals or rivers, in comparison to other forms of trash. Interceptors located in different areas exhibited modest variations in the amount of trash collected. For instance, the Professor Trash Wheel collected a higher proportion of wrappers compared to plastic bottles, whilst the Gwynnda Trash Wheel had the reverse trend.
+
+Based on Figure 2, there is a overall trend indicating that the amount of trash collected experienced a slightly increase from January to May. It then reached its peak from June to September, followed by a significant decrease in October, and grew again starting from November. The peak in trash collection could be attributed to the high demand during the peak summer vacation season, which typically occurs from June to September. Additionally, the position of the interceptor plays a significant role in determining the trash of trash collected. Further investigation can be conducted to investigate the cause of the significant surge in the amount of trash collected by the Gwynnda Trash Wheel in December 2023, which exceeded twice the amount collected in the previous month.
+
+ANOVA analysis was done on the relationship between the trash amount per interceptors over the 12 months.
+
+> Ho: All interceptors collected the same mean amount of trash over the 12 months.
+>
+> Ha: At least one interceptors collects a different mean amount of trash over the 12 months.
+
+The result rejects the Null hypothesis with a significant P-value of 7.11e-05.
+
+```{r}
+#| label: anova-analysis
+
+df_anova <- df2 |>
+  select(!Month) # remove Month column
+
+trash.aov <- aov(total_trash ~ Name, data = df_anova) # ANOVA analysis
+summary(trash.aov)
+```

@@ -2,42 +2,42 @@
   {
     "objectID": "proposal.html",
     "href": "proposal.html",
-    "title": "Proposal title",
+    "title": "Distribution on the amount of trash collected by Mr. Trash Wheel in 2023",
     "section": "",
-    "text": "library(tidyverse)"
+    "text": "Code\nif (!require(\"pacman\")) \n  install.packages(\"pacman\")\n  \npacman::p_load(here,\n               tidytuesdayR,\n               tidyverse)"
   },
   {
     "objectID": "proposal.html#dataset",
     "href": "proposal.html#dataset",
-    "title": "Proposal title",
+    "title": "Distribution on the amount of trash collected by Mr. Trash Wheel in 2023",
     "section": "Dataset",
-    "text": "Dataset\nA brief description of your dataset including its provenance, dimensions, etc. as well as the reason why you chose this dataset.\nMake sure to load the data and use inline code for some of this information."
+    "text": "Dataset\n\n\nCode\nrm(list=ls())\ndffile &lt;- tidytuesdayR::tt_load('2024-03-05')\n\ndf &lt;- dffile$trashwheel # load data set\n\n\nThe trashwheel dataset provided by Mr. Trash Wheel, one of the four Trash Wheels in the Healthy Harbor initiative, was selected from Tidy Tuesday 2024 for this project. It records the data of the trash collected by the four semi-autonomous trash interceptors placed at the end of a river, stream or other outfall, namely the Mister Trash Wheel, the Professor Trash Wheel, the Captain Trash Wheel and the Gwynnda Trash Wheel from 2014 to 2023.\nSince the trash wheel started operating from 2014, there were nearly 2,362 tons of trash collected, which equal to the weight of 15 whales! Among those collected trash, there were over 13 millions of cigarette butts. It really helps saving our ocean from toxic plastic pollution.\nThere are 16 variables with 993 records in the dataset. Each observation represents a dumpster from one of the four trash interceptors, and its related values such as the date of collection, weight, volume and the number of different trash collected. In total 7 types of trash are recorded as attributes and the collection amount are stored as numerical data: PlasticBottles, Polystyrene, CigaretteButts, GlassBottles, PlasticBags, Wrappers, SportsBalls.\nThe selection of dataset was based on its cleanliness, simplicity, and meaningfulness. It is astonishing when looking into the amount of trash that has been disposed into rivers and the impressive collection capacity of the trash wheels. The objective of this project is to present the dataset in a clean and eye-catching manner in order to engage individuals in the issue of trash pollution and appreciate the endeavors dedicated to preserving the environment from trash."
   },
   {
     "objectID": "proposal.html#questions",
     "href": "proposal.html#questions",
-    "title": "Proposal title",
+    "title": "Distribution on the amount of trash collected by Mr. Trash Wheel in 2023",
     "section": "Questions",
-    "text": "Questions\nThe two questions you want to answer."
+    "text": "Questions\nWhat is the distribution of trash collected by Mr. Trash Wheel in 2023?"
   },
   {
     "objectID": "proposal.html#analysis-plan",
     "href": "proposal.html#analysis-plan",
-    "title": "Proposal title",
+    "title": "Distribution on the amount of trash collected by Mr. Trash Wheel in 2023",
     "section": "Analysis plan",
-    "text": "Analysis plan\n\nA plan for answering each of the questions including the variables involved, variables to be created (if any), external data to be merged in (if any)."
+    "text": "Analysis plan\nThis project will review the distribution of trash collected by Mr. Trash Wheel in 2023 from two aspects: by the types of the trash collected and by the trash interceptors. The data wrangling will mainly rely on tidyverse library.\nAttributes used for the project (filtered by 2023):\n\n\nCode\ndf &lt;- df |&gt;\n  filter(Year == 2023) |&gt; # filter the dataset in 2023\n  select(Name, Month, PlasticBottles, Polystyrene, CigaretteButts, GlassBottles, PlasticBags, Wrappers, SportsBalls) # select related atributes for analysis\n\nglimpse(df) # take a look of the filtered dataset\n\n\nRows: 165\nColumns: 9\n$ Name           &lt;chr&gt; \"Mister Trash Wheel\", \"Mister Trash Wheel\", \"Mister Tra…\n$ Month          &lt;chr&gt; \"January\", \"February\", \"February\", \"March\", \"March\", \"A…\n$ PlasticBottles &lt;dbl&gt; 1700, 2400, 3600, 2700, 2900, 1800, 2200, 3000, 2100, 1…\n$ Polystyrene    &lt;dbl&gt; 210, 300, 280, 180, 200, 90, 210, 280, 200, 64, 190, 42…\n$ CigaretteButts &lt;dbl&gt; 2900, 3300, 4200, 3200, 3000, 2400, 3800, 4000, 3300, 1…\n$ GlassBottles   &lt;dbl&gt; 15, 21, 24, 18, 20, 16, 30, 22, 21, 10, 32, 27, 40, 36,…\n$ PlasticBags    &lt;dbl&gt; 180, 210, 240, 270, 200, 170, 280, 320, 260, 120, 340, …\n$ Wrappers       &lt;dbl&gt; 1500, 1100, 2200, 1700, 1400, 980, 1800, 2100, 2100, 90…\n$ SportsBalls    &lt;dbl&gt; 10, 21, 30, 20, 14, 11, 28, 18, 24, 9, 32, 40, 21, 27, …\n\n\n\nPlot 1:\nFrom types of the trash collected perspective, separate plots by geom_pictogram() will be created for each trash interceptor. It aims to visualized the proportion of differ trash collected by each trash interceptor clearly for comparison, with the use of icons to represent different trash types instead of single image with geom_waffle().\nThe variables involved in this plot will be Name containing the name of interceptors, and the 7 trash type variables. The dataset will first be filtered by Year 2023, followed by transferring all trash column names into a new variable trash_type with trash_amount storing the numeric amount of each trash by using pivot_longer(). Then the data will be group_by() Name and trash_type, and calculate the sum of trash collected with summarise().\n\n\nPlot 2:\nOn the other hand, a plot by geom_col() with x-axis equals to Month and y-axis equal to total_trash will be created to show the change of trash amount collected by each trash interceptor with dodged columns throughout the year 2023. To do this, after filtering the dataset with Year 2023, variables Name, Month, and the 7 trash type variables will be selected. A new variable total_trash will be added by summing up all trash amount collected by each trash interceptor rowwisely.\nFor statistical analysis, ANOVA will be used for observing the variance between total trash amount by each trash interceptor throughout the year. To prepare the data matrix for this, the cleaned data from plot 2 will be used by removing Month and the 7 trash type variables, remaining Name and total_trash. ANOVA will be performed with aov() and the result will be interpreted in Discussion section with information from plot 2.\n\n\nPlan of Attack:\n\n\n\n\n\n\n\n\n\n\nTask Name\nStatus\nDue\nPriority\nSummary\n\n\n\n\nDraft of proposal\nComplete\n26-May\nHigh\nChoose of dataset.\nDecide project questions and variables used.\n\n\nFinalize project outline\nComplete\n3-Jun\nHigh\nAmend the proposal.qmd with feedbacks from classmates and professor\n\n\nComplete waffle plot for part 1\nComplete\n15-Jun\nModerate\nComplete waffle plot and its interpretation\n\n\nComplete bar chart for part 2\nComplete\n18-Jun\nModerate\nComplete bar chart and its interpretation\n\n\nFinalize the report\nComplete\n20-Jun\nLow\nFinalize the index.qmd\n\n\nFinalize the presentable materials\nComplete\n20-Jun\nLow\nFinalize the presentation.qmd\n\n\nRecord the presentation\nComplete\n24-Jun\nLow\nComplete the presentation"
   },
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Project Title",
+    "title": "Distribution on the amount of trash collected by Mr. Trash Wheel in 2023",
     "section": "",
-    "text": "Add project abstract here."
+    "text": "This project was based on the trashwheel dataset provided by Mr. Trash Wheel, one of the four Trash Wheels in the Healthy Harbor initiative, from Tidy Tuesday 2024. It recorded the data of the trash collected by the four semi-autonomous trash interceptors placed at the end of a river, stream or other outfall, namely the Mister Trash Wheel, the Professor Trash Wheel, the Captain Trash Wheel and the Gwynnda Trash Wheel from 2014 to 2023.\nThere are 16 variables with 993 records in the dataset. Each observation represents a dumpster from one of the four trash interceptors, and its related values such as the date of collection, weight, volume and the number of different trash collected. In total 7 types of trash are recorded as attributes and the collection amount are stored as numerical data: PlasticBottles, Polystyrene, CigaretteButts, GlassBottles, PlasticBags, Wrappers, SportsBalls."
   },
   {
     "objectID": "index.html#abstract",
     "href": "index.html#abstract",
-    "title": "Project Title",
+    "title": "Distribution on the amount of trash collected by Mr. Trash Wheel in 2022",
     "section": "",
     "text": "Add project abstract here."
   },
@@ -45,22 +45,22 @@
     "objectID": "presentation.html#quarto",
     "href": "presentation.html#quarto",
     "title": "Project title",
-    "section": "Quarto",
-    "text": "Quarto\n\nThe presentation is created using the Quarto CLI\n## sets the start of a new slide"
+    "section": "",
+    "text": "The presentation is created using the Quarto CLI\n## sets the start of a new slide"
   },
   {
     "objectID": "presentation.html#layouts",
     "href": "presentation.html#layouts",
     "title": "Project title",
-    "section": "Layouts",
-    "text": "Layouts\nYou can use plain text\n\n\n\nor bullet points1\n\n\nor in two columns\n\n\n\nlike\nthis\n\nAnd add footnotes"
+    "section": "",
+    "text": "You can use plain text\n\n\n\nor bullet points1\n\n\nor in two columns\n\n\n\nlike\nthis"
   },
   {
     "objectID": "presentation.html#code",
     "href": "presentation.html#code",
     "title": "Project title",
-    "section": "Code",
-    "text": "Code\n\n\n# A tibble: 2 × 5\n  term        estimate std.error statistic       p.value\n  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;\n1 (Intercept)   25.3      3.08        8.22 0.00000000358\n2 speed         -0.116    0.0642     -1.81 0.0806       \n\n\n# A tibble: 1 × 12\n  r.squared adj.r.squared sigma statistic p.value    df logLik   AIC   BIC\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1    0.0983        0.0682  5.82      3.27  0.0806     1  -101.  207.  212.\n# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;"
+    "section": "",
+    "text": "# A tibble: 2 × 5\n  term        estimate std.error statistic       p.value\n  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;\n1 (Intercept)   25.3      3.08        8.22 0.00000000358\n2 speed         -0.116    0.0642     -1.81 0.0806       \n\n\n# A tibble: 1 × 12\n  r.squared adj.r.squared sigma statistic p.value    df logLik   AIC   BIC\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1    0.0983        0.0682  5.82      3.27  0.0806     1  -101.  207.  212.\n# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;"
   },
   {
     "objectID": "presentation.html#plots",
@@ -73,8 +73,8 @@
     "objectID": "presentation.html#plot-and-text",
     "href": "presentation.html#plot-and-text",
     "title": "Project title",
-    "section": "Plot and text",
-    "text": "Plot and text\n\n\n\nSome text\ngoes here"
+    "section": "",
+    "text": "Some text\ngoes here"
   },
   {
     "objectID": "presentation.html#tables",
@@ -88,7 +88,7 @@
     "href": "presentation.html#images",
     "title": "Project title",
     "section": "Images",
-    "text": "Images\n\nImage credit: Danielle Navarro, Percolate."
+    "text": "Images\n\n\n\nImage credit: Danielle Navarro, Percolate."
   },
   {
     "objectID": "presentation.html#math-expressions",
@@ -109,6 +109,76 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "This project was developed by [Team Name] For INFO 526 - Data Analysis and Visualization at the University of Arizona, taught by Dr. Greg Chism. The team is comprised of the following team members.\n\nTeam member 1: One sentence description of Team member 1 (e.g., year, major, etc.).\nTeam member 2: One sentence description of Team member 2 (e.g., year, major, etc.).\nTeam member 3: One sentence description of Team member 3 (e.g., year, major, etc.).\nTeam member 4: One sentence description of Team member 4 (e.g., year, major, etc.)."
+    "text": "This project was developed by Iris Sum For INFO 526 - Data Analysis and Visualization at the University of Arizona, taught by Dr. Greg Chism."
+  },
+  {
+    "objectID": "presentation.html",
+    "href": "presentation.html",
+    "title": "Project title",
+    "section": "",
+    "text": "The presentation is created using the Quarto CLI\n## sets the start of a new slide\n\n\n\n\nYou can use plain text\n\n\n\nor bullet points1\n\n\nor in two columns\n\n\n\nlike\nthis\n\n\n\n\n\n\n# A tibble: 2 × 5\n  term        estimate std.error statistic       p.value\n  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;\n1 (Intercept)   25.3      3.08        8.22 0.00000000358\n2 speed         -0.116    0.0642     -1.81 0.0806       \n\n\n# A tibble: 1 × 12\n  r.squared adj.r.squared sigma statistic p.value    df logLik   AIC   BIC\n      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;\n1    0.0983        0.0682  5.82      3.27  0.0806     1  -101.  207.  212.\n# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSome text\ngoes here"
+  },
+  {
+    "objectID": "presentation.html#footnotes",
+    "href": "presentation.html#footnotes",
+    "title": "Project title",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nAnd add footnotes↩︎"
+  },
+  {
+    "objectID": "presentation.html#introduction",
+    "href": "presentation.html#introduction",
+    "title": "Distribution on the amount of trash collected by Mr. Trash Wheel in 2023",
+    "section": "Introduction",
+    "text": "Introduction\n\nTrash disposed improperly leading to serious water pollution in the sea, river or stream\nInteresting to know what kind of trash mainly involved and their amount\nLatest data of trash collected by Mr. Trash Wheel were examined in this project\n\n\nSource: Mr. Trash Wheel homepage at https://www.mrtrashwheel.com/trash-interception"
+  },
+  {
+    "objectID": "presentation.html#dataset",
+    "href": "presentation.html#dataset",
+    "title": "Distribution on the amount of trash collected by Mr. Trash Wheel in 2023",
+    "section": "Dataset",
+    "text": "Dataset\n\ntrashwheel dataset provided by Mr. Trash Wheel from Tidy Tuesday 2024\n16 variables with 993 records including:\n\nAttributes related to a dumpster:\nID, Name, Dumpster, Month, Year, Date\nNumber of trash collected stored as:\nPlasticBottles, Polystyrene, CigaretteButts, GlassBottles, PlasticBags, Wrappers, SportsBalls, Weight, Volume, HomesPowered"
+  },
+  {
+    "objectID": "presentation.html#main-question",
+    "href": "presentation.html#main-question",
+    "title": "Distribution on the amount of trash collected by Mr. Trash Wheel in 2023",
+    "section": "Main Question",
+    "text": "Main Question\n \nWhat is the distribution of trash collected by Mr. Trash Wheel in 2023?"
+  },
+  {
+    "objectID": "presentation.html#visualization-1",
+    "href": "presentation.html#visualization-1",
+    "title": "Distribution on the amount of trash collected by Mr. Trash Wheel in 2023",
+    "section": "Visualization 1",
+    "text": "Visualization 1\n\nFigure 1: Proportion of trash collected by Mr. Trash Wheel in 2023"
+  },
+  {
+    "objectID": "presentation.html#visualization-2",
+    "href": "presentation.html#visualization-2",
+    "title": "Distribution on the amount of trash collected by Mr. Trash Wheel in 2023",
+    "section": "Visualization 2",
+    "text": "Visualization 2\n\nFigure 2: Nubmer of trash collected by Mr. Trash Wheel in 2023 (by months)"
+  },
+  {
+    "objectID": "presentation.html#conclusions",
+    "href": "presentation.html#conclusions",
+    "title": "Distribution on the amount of trash collected by Mr. Trash Wheel in 2023",
+    "section": "Conclusions",
+    "text": "Conclusions\n\nMajority of collected trash were:\n\nCigarette butts\nPlastic bottles or wrappers\n\nLocation of the interceptors will affect its trash collection amount and types.\nFurther investigation on why there was a drastic increase in trash collected by Gwynnda Trash Wheel in Dec 2023."
+  },
+  {
+    "objectID": "index.html#introduction",
+    "href": "index.html#introduction",
+    "title": "Distribution on the amount of trash collected by Mr. Trash Wheel in 2023",
+    "section": "",
+    "text": "This project was based on the trashwheel dataset provided by Mr. Trash Wheel, one of the four Trash Wheels in the Healthy Harbor initiative, from Tidy Tuesday 2024. It recorded the data of the trash collected by the four semi-autonomous trash interceptors placed at the end of a river, stream or other outfall, namely the Mister Trash Wheel, the Professor Trash Wheel, the Captain Trash Wheel and the Gwynnda Trash Wheel from 2014 to 2023.\nThere are 16 variables with 993 records in the dataset. Each observation represents a dumpster from one of the four trash interceptors, and its related values such as the date of collection, weight, volume and the number of different trash collected. In total 7 types of trash are recorded as attributes and the collection amount are stored as numerical data: PlasticBottles, Polystyrene, CigaretteButts, GlassBottles, PlasticBags, Wrappers, SportsBalls."
+  },
+  {
+    "objectID": "index.html#what-is-the-distribution-of-trash-collected-by-mr.-trash-wheel-in-2023",
+    "href": "index.html#what-is-the-distribution-of-trash-collected-by-mr.-trash-wheel-in-2023",
+    "title": "Distribution on the amount of trash collected by Mr. Trash Wheel in 2023",
+    "section": "What is the distribution of trash collected by Mr. Trash Wheel in 2023?",
+    "text": "What is the distribution of trash collected by Mr. Trash Wheel in 2023?\n\nIntroduction\nSince the trash wheel started operating from 2014, there were nearly 2,362 tons of trash collected, which equal to the weight of 15 whales! It will be interesting to know what kind of trash mainly involved and their amount. The latest data were examined in this project to find out the distribution of trash collected by Mr. Trash Wheel.\nTo answer the project question, the dataset will first be filtered by Year equals to 2023. Month, Name representing the interceptors’ name and their amount of trash collection including lasticBottles, Polystyrene, CigaretteButts, GlassBottles, PlasticBags, Wrappers, SportsBalls will be used for analysis.\n\n\nApproach\nPlot 1: From types of the trash collected perspective, separate plots by geom_pictogram() will be created for each trash interceptor. It aims to visualized the proportion of differ trash collected by each trash interceptor clearly for comparison, with the use of icons to represent different trash types instead of single image (like a square or circle) with geom_waffle().\nPlot 2: A plot by geom_col() with y-axis equals to Month and x-axis equal to total_trash will be created to show the change of trash amount collected by each trash interceptor with dodged columns throughout the year 2023. The amount of trash collected by each interceptor can be compared easily side by side, and the trend of trash collection can be observed in this bar plot.\n\n\nAnalysis\n\n\n\n\n\n\n\nFigure 1: Proportion of trash collected by Mr. Trash Wheel in 2023\n\n\n\n\n\n\n\nFigure 2: Nubmer of trash collected by Mr. Trash Wheel in 2023 (by months)\n\n\n\n\n\n\nDiscussion\nAccording to Figure 1, the majority of trash collected by all interceptors is cigarette butts, followed by plastic bottles or wrappers. The tiny size of the cigarette facilitates its disposal into canals or rivers, in comparison to other forms of trash. Interceptors located in different areas exhibited modest variations in the amount of trash collected. For instance, the Professor Trash Wheel collected a higher proportion of wrappers compared to plastic bottles, whilst the Gwynnda Trash Wheel had the reverse trend.\nBased on Figure 2, there is a overall trend indicating that the amount of trash collected experienced a slightly increase from January to May. It then reached its peak from June to September, followed by a significant decrease in October, and grew again starting from November. The peak in trash collection could be attributed to the high demand during the peak summer vacation season, which typically occurs from June to September. Additionally, the position of the interceptor plays a significant role in determining the trash of trash collected. Further investigation can be conducted to investigate the cause of the significant surge in the amount of trash collected by the Gwynnda Trash Wheel in December 2023, which exceeded twice the amount collected in the previous month.\nANOVA analysis was done on the relationship between the trash amount per interceptors over the 12 months.\n\nHo: All interceptors collected the same mean amount of trash over the 12 months.\nHa: At least one interceptors collects a different mean amount of trash over the 12 months.\n\nThe result rejects the Null hypothesis with a significant P-value of 7.11e-05.\n\n\n            Df    Sum Sq   Mean Sq F value   Pr(&gt;F)    \nName         3 1.429e+10 4.762e+09   9.288 7.11e-05 ***\nResiduals   44 2.256e+10 5.127e+08                     \n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1"
   }
 ]
